@@ -4,9 +4,9 @@ import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 const { getUser } = getKindeServerSession()
 const user = await getUser()
 
-const href = user ? '/dashboard' : '/login'
+const href = user ? '/home' : '/login'
 
-export default function Home() {
+export default function LandingPage() {
   return (
     <div className="w-screen h-screen bg-black flex justify-center items-center text-white">
       <div className="w-full max-w-[600px] mx-auto">

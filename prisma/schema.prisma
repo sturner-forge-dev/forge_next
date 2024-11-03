@@ -23,3 +23,12 @@ model User {
   lastName  String?
   role      String  @default("user")
 }
+
+model Exercises {
+  id         String  @id @default(uuid())
+  name       String  @unique
+  type       String?
+  equipment  String?
+  difficulty String?
+  description String?
+}

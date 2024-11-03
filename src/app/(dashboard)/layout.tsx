@@ -10,6 +10,7 @@ const user = await getUser()
 
 const links = [
   { href: '/dashboard', label: 'Home' },
+  { href: '/exercises', label: 'All Exercises' },
   { href: '/profile', label: 'Profile' },
   { href: '/settings', label: 'Settings' },
   { href: '/about', label: 'About' }
