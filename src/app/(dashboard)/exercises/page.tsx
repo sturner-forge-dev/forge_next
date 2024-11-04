@@ -9,10 +9,9 @@ type Props = {
   }
 }
 
-const Exercises = async ({ searchParams }: Props) => {
-  const sortBy = searchParams.sortBy || 'name'
-  const order = searchParams.order || 'asc'
-
+const Exercises = async ({
+  searchParams: { sortBy = 'name', order = 'asc' }
+}: Props) => {
   const exercises = await prisma.exercises.findMany({
     orderBy: {
       [sortBy]: order

@@ -1,0 +1,45 @@
+'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { LogoutLink } from '@kinde-oss/kinde-auth-nextjs/components' // Changed this line
+
+const links = [
+  { href: '/home', label: 'Home' },
+  { href: '/exercises', label: 'All Exercises' },
+  { href: '/profile', label: 'Profile' },
+  { href: '/settings', label: 'Settings' },
+  { href: '/about', label: 'About' }
+]
+
+const Navigation = ({ user }: { user: boolean }) => {
+  const pathname = usePathname()
+
+  return (
+    <ul>
+      {links.map((link) => (
+        <li key={link.href} className="px-2 py-6 text-xl">
+          <Link
+            href={link.href}
+            className={
+              pathname === link.href
+                ? 'bg-blue-500 font-bold p-4 rounded-lg hover:bg-blue-600'
+                : 'hover:bg-gray-500 p-4 rounded-lg'
+            }
+          >
+            {link.label}
+          </Link>
+        </li>
+      ))}
+      {user ? (
+        <li className="px-2 py-6 text-xl">
+          <LogoutLink className="hover:bg-gray-500 p-4 rounded-lg">
+            Logout
+          </LogoutLink>
+        </li>
+      ) : null}
+    </ul>
+  )
+}
+
+export default Navigation
