@@ -1,18 +1,18 @@
 'use client'
 
 import { type User } from '@/app/types'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { updateUserAction } from '../actions'
+import { useRouter } from 'next/navigation'
 
 interface UserProfileProps {
   user: User
 }
 
 export const UserProfile = ({ user }: UserProfileProps) => {
-  const [firstName, setFirstName] = useState(user.firstName)
-  const [lastName, setLastName] = useState(user.lastName)
-  const [email, setEmail] = useState(user.email)
-  const [phone, setPhone] = useState(user.phone)
+  const router = useRouter()
+
+  const [profileUser, setProfileUser] = useState(user)
   const [phoneError, setPhoneError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
@@ -30,7 +30,7 @@ export const UserProfile = ({ user }: UserProfileProps) => {
       )
     }
 
-    setPhone(phone)
+    setProfileUser({ ...profileUser, phone })
   }
 
   const numericPhone = (phone: string | null) => {
@@ -44,13 +44,13 @@ export const UserProfile = ({ user }: UserProfileProps) => {
 
     switch (name) {
       case 'firstName':
-        setFirstName(value)
+        setProfileUser({ ...profileUser, firstName: value })
         break
       case 'lastName':
-        setLastName(value)
+        setProfileUser({ ...profileUser, lastName: value })
         break
       case 'email':
-        setEmail(value)
+        setProfileUser({ ...profileUser, email: value })
         break
       case 'phone':
         validatePhone(value)
@@ -66,19 +66,14 @@ export const UserProfile = ({ user }: UserProfileProps) => {
     try {
       const saveUser = {
         ...user,
-        firstName,
-        lastName,
-        email,
-        phone: numericPhone(phone)
+        ...profileUser,
+        phone: numericPhone(profileUser.phone)
       }
 
       const newUser = await updateUserAction(saveUser)
 
       if (newUser) {
-        setFirstName(newUser.firstName)
-        setLastName(newUser.lastName)
-        setEmail(newUser.email)
-        setPhone(newUser.phone)
+        router.refresh()
         setSuccessMessage('Profile saved successfully!')
         setTimeout(() => setSuccessMessage(''), 3000)
       }
@@ -88,6 +83,10 @@ export const UserProfile = ({ user }: UserProfileProps) => {
       setTimeout(() => setErrorMessage(''), 3000)
     }
   }
+
+  useEffect(() => {
+    setProfileUser(user)
+  }, [user])
 
   return (
     <>
@@ -103,7 +102,7 @@ export const UserProfile = ({ user }: UserProfileProps) => {
               <input
                 type="text"
                 name="firstName"
-                value={firstName ?? ''}
+                value={profileUser.firstName ?? ''}
                 onChange={handleOnChange}
                 className="text-md text-black min-w-60 pl-2 py-1"
               />
@@ -112,7 +111,7 @@ export const UserProfile = ({ user }: UserProfileProps) => {
               <input
                 type="text"
                 name="lastName"
-                value={lastName ?? ''}
+                value={profileUser.lastName ?? ''}
                 onChange={handleOnChange}
                 className="text-md text-black min-w-60 pl-2 py-1"
               />
@@ -123,9 +122,9 @@ export const UserProfile = ({ user }: UserProfileProps) => {
             <div className="flex flex-col">
               <h1 className="text-xl py-4">Email</h1>
               <input
-                type="text"
+                type="email"
                 name="email"
-                value={email}
+                value={profileUser.email}
                 onChange={handleOnChange}
                 className="text-md text-black min-w-60 pl-2 py-1"
                 required
@@ -133,9 +132,9 @@ export const UserProfile = ({ user }: UserProfileProps) => {
 
               <h1 className="text-xl py-4">Phone</h1>
               <input
-                type="text"
+                type="phone"
                 name="phone"
-                value={phone ?? ''}
+                value={profileUser.phone ?? ''}
                 onChange={handleOnChange}
                 className="text-md text-black min-w-60 pl-2 py-1"
               />

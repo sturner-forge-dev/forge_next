@@ -2,20 +2,22 @@ import { prisma } from '@/app/utils/db'
 import Link from 'next/link'
 import { type ExerciseSortField, type SortDirection } from '@/app/types'
 
-type Props = {
-  searchParams: {
-    sortBy?: ExerciseSortField
-    order?: SortDirection
-  }
-}
+export default async function Exercises({
+  searchParams
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const params = await searchParams
+  const sortBy = params?.sortBy as ExerciseSortField
+  const order = params?.order as SortDirection
 
-const Exercises = async ({
-  searchParams: { sortBy = 'name', order = 'asc' }
-}: Props) => {
   const exercises = await prisma.exercises.findMany({
-    orderBy: {
-      [sortBy]: order
-    }
+    ...(sortBy &&
+      order && {
+        orderBy: {
+          [sortBy]: order
+        }
+      })
   })
 
   const SortIcon = ({ currentField }: { currentField: string }) => {
@@ -24,13 +26,25 @@ const Exercises = async ({
   }
 
   const getSortLink = (field: string) => {
-    const newOrder = field === sortBy && order === 'asc' ? 'desc' : 'asc'
-    return `?sortBy=${field}&order=${newOrder}`
+    // If clicking a different field, start with ascending
+    if (field !== sortBy) {
+      return `?sortBy=${field}&order=asc`
+    }
+
+    // If clicking the same field, cycle through states
+    switch (order) {
+      case 'asc':
+        return `?sortBy=${field}&order=desc`
+      case 'desc':
+        return '/exercises' // Clear sorting
+      default:
+        return `?sortBy=${field}&order=asc` // Start with ascending
+    }
   }
 
   return (
     <div className="p-6">
-      <table className="w-full">
+      <table className="w-[90%] mx-auto">
         <thead>
           <tr className="flex justify-between px-4 py-2 border-b border-white/50 mb-6">
             <th className="flex-1 text-center">
@@ -84,5 +98,3 @@ const Exercises = async ({
     </div>
   )
 }
-
-export default Exercises

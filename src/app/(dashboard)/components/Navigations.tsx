@@ -5,11 +5,11 @@ import { usePathname } from 'next/navigation'
 import { LogoutLink } from '@kinde-oss/kinde-auth-nextjs/components' // Changed this line
 
 const links = [
-  { href: '/home', label: 'Home' },
-  { href: '/exercises', label: 'All Exercises' },
-  { href: '/profile', label: 'Profile' },
-  { href: '/settings', label: 'Settings' },
-  { href: '/about', label: 'About' }
+  { href: '/home', label: 'home' },
+  { href: '/exercises', label: 'exercises' },
+  { href: '/profile', label: 'profile' },
+  { href: '/settings', label: 'settings' },
+  { href: '/about', label: 'about' }
 ]
 
 const Navigation = ({ user }: { user: boolean }) => {
@@ -23,7 +23,7 @@ const Navigation = ({ user }: { user: boolean }) => {
             href={link.href}
             className={
               pathname === link.href
-                ? 'bg-blue-500 font-bold p-4 rounded-lg hover:bg-blue-600'
+                ? 'bg-blue-500 font-bold p-4 rounded-lg hover:bg-blue-600 border border-white/50'
                 : 'hover:bg-gray-500 p-4 rounded-lg'
             }
           >

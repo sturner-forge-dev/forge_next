@@ -10,7 +10,7 @@ export default async function Profile() {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-6 w-[90%] mx-auto">
       <h1 className="text-xl">Profile</h1>
       <UserProfile user={user} />
     </div>

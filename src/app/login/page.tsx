@@ -1,7 +1,6 @@
 import {
   RegisterLink,
-  LoginLink,
-  LogoutLink
+  LoginLink
 } from '@kinde-oss/kinde-auth-nextjs/components'
 
 const LoginPage = () => {
@@ -14,9 +13,6 @@ const LoginPage = () => {
         <RegisterLink className="bg-blue-400 px-4 py-2 rounded-lg text-xl border border-white/50 hover:bg-blue-600">
           sign up
         </RegisterLink>
-        <LogoutLink className="bg-blue-400 px-4 py-2 rounded-lg text-xl border border-white/50 hover:bg-blue-600">
-          log out
-        </LogoutLink>
       </div>
     </div>
   )
