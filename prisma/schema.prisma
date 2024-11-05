@@ -25,10 +25,10 @@ model User {
 }
 
 model Exercises {
-  id         String  @id @default(uuid())
-  name       String  @unique
-  type       String?
-  equipment  String?
-  difficulty String?
+  id          String  @id @default(uuid())
+  name        String  @unique
+  type        String?
+  equipment   String?
+  difficulty  String?
   description String?
 }
