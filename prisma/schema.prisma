@@ -14,21 +14,38 @@ datasource db {
   relationMode = "prisma"
 }
 
-model User {
-  id        String  @id @default(uuid())
-  kindeId   String  @unique
-  email     String  @unique
-  phone     String?
-  firstName String?
-  lastName  String?
-  role      String  @default("user")
-}
-
-model Exercises {
+model Exercise {
   id          String  @id @default(uuid())
   name        String  @unique
   type        String?
   equipment   String?
   difficulty  String?
   description String?
+}
+
+model CustomExercise {
+  id          String   @id @default(uuid())
+  name        String
+  type        String?
+  equipment   String?
+  difficulty  String?
+  description String?
+  createdAt   DateTime @default(now())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@unique([name, userId])
+  @@index([userId])
+}
+
+model User {
+  id              String           @id @default(uuid())
+  kindeId         String           @unique
+  email           String           @unique
+  phone           String?
+  firstName       String?
+  lastName        String?
+  role            String           @default("user")
+  
+  customExercises CustomExercise[]
 }

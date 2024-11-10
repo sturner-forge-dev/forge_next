@@ -95,8 +95,8 @@ export const UserProfile = ({ user }: UserProfileProps) => {
         className="flex flex-col gap-4"
         onSubmit={handleSubmit}
       >
-        <div className="flex flex-col gap-4">
-          <div className="flex gap-4">
+        <div className="flex flex-col m-auto">
+          <div className="flex gap-44">
             <div className="flex flex-col">
               <h1 className="text-xl py-4">First Name</h1>
               <input
@@ -116,9 +116,7 @@ export const UserProfile = ({ user }: UserProfileProps) => {
                 className="text-md text-black min-w-60 pl-2 py-1"
               />
             </div>
-          </div>
 
-          <div className="flex gap-4">
             <div className="flex flex-col">
               <h1 className="text-xl py-4">Email</h1>
               <input
@@ -142,7 +140,7 @@ export const UserProfile = ({ user }: UserProfileProps) => {
             </div>
           </div>
 
-          <div className="flex gap-4 mt-4">
+          <div className="flex gap-4 mt-4 justify-end">
             <button
               type="submit"
               className="bg-blue-400 px-4 py-2 rounded-lg text-xl border border-white/50 hover:bg-blue-600"
@@ -150,12 +148,14 @@ export const UserProfile = ({ user }: UserProfileProps) => {
               Save
             </button>
           </div>
+          {successMessage && (
+            <p className="text-green-500 mt-2 text-right">{successMessage}</p>
+          )}
+          {errorMessage && (
+            <p className="text-red-500 mt-2 text-right">{errorMessage}</p>
+          )}
         </div>
       </form>
-      {successMessage && (
-        <p className="text-green-500 mt-2">{successMessage}</p>
-      )}
-      {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
     </>
   )
 }

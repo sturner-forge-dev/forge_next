@@ -11,3 +11,12 @@ export type User = {
   lastName: string | null
   role: string
 }
+
+export type Exercise = {
+  id: string
+  name: string
+  type: string | null
+  equipment: string | null
+  difficulty: string | null
+  description?: string | null
+}

@@ -34,7 +34,7 @@ const Navigation = ({ user }: { user: boolean }) => {
       {user ? (
         <li className="px-2 py-6 text-xl">
           <LogoutLink className="hover:bg-gray-500 p-4 rounded-lg">
-            Logout
+            logout
           </LogoutLink>
         </li>
       ) : null}

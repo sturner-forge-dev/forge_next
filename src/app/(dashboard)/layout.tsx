@@ -7,8 +7,8 @@ import Navigation from './components/Navigations'
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="h-screen w-screen relative bg-black text-white">
-      <aside className="absolute w-[200px] top-0 left-0 h-full border-r border-white/50 p-4">
+    <div className="min-h-screen w-full relative bg-black/90 text-white overflow-auto">
+      <aside className="fixed w-[200px] top-0 left-0 h-screen border-r border-white/50 p-4">
         <div className="text-xl">Forge Fitness</div>
         <Navigation user={user ? true : false} />
       </aside>
@@ -20,7 +20,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               alt="logo"
               width={60}
               height={60}
-              className="pt-16"
+              className="mt-16 outline outline-1 outline-white/50 rounded-full cursor-pointer"
             />
           </div>
         </header>
