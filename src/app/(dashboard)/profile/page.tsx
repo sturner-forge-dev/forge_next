@@ -1,6 +1,6 @@
 import { getUser } from '@/app/api/data-layer/user'
 import { redirect } from 'next/navigation'
-import { UserProfile } from './components/UserProfile'
+import { ProfileContent } from './components/ProfileContent'
 
 export default async function Profile() {
   const user = await getUser()
@@ -9,10 +9,5 @@ export default async function Profile() {
     redirect('/login')
   }
 
-  return (
-    <div className="p-6 w-[90%] mx-auto">
-      <h1 className="text-xl">Profile</h1>
-      <UserProfile user={user} />
-    </div>
-  )
+  return <ProfileContent user={user} />
 }

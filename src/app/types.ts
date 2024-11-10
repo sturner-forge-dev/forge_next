@@ -18,5 +18,14 @@ export type Exercise = {
   type: string | null
   equipment: string | null
   difficulty: string | null
-  description?: string | null
+  description: string | null
+}
+
+export type CustomExercise = {
+  user: User
+  name: string
+  type: string | null
+  equipment: string | null
+  difficulty: string | null
+  description: string | null
 }

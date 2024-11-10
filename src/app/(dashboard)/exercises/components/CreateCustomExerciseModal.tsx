@@ -1,25 +1,28 @@
 'use client'
 
-import { type Exercise } from '@/app/types'
+import { User, type CustomExercise } from '@/app/types'
 import { useState } from 'react'
 
 interface CreateCustomExerciseModalProps {
   isOpen: boolean
   onClose: () => void
-  onCreate: (exercise: Exercise) => void
+  onCreate: (exercise: CustomExercise) => void
+  user: User
 }
 
 export default function CreateCustomExerciseModal({
   isOpen,
   onClose,
-  onCreate
+  onCreate,
+  user
 }: CreateCustomExerciseModalProps) {
-  const [exercise, setExercise] = useState<Exercise>({
-    id: crypto.randomUUID(),
+  const [exercise, setExercise] = useState<CustomExercise>({
+    user: user,
     name: '',
     type: '',
     equipment: '',
-    difficulty: ''
+    difficulty: '',
+    description: ''
   })
 
   return (
@@ -37,7 +40,13 @@ export default function CreateCustomExerciseModal({
 
         <h2 className="text-2xl font-bold mb-4">Create Custom Exercise</h2>
 
-        <form className="space-y-4">
+        <form
+          className="space-y-4"
+          onSubmit={(e) => {
+            e.preventDefault()
+            onCreate(exercise)
+          }}
+        >
           <div>
             <label htmlFor="name">Name</label>
             <input
@@ -111,9 +120,8 @@ export default function CreateCustomExerciseModal({
                 Cancel
               </button>
               <button
-                type="button"
+                type="submit"
                 className="px-4 py-2 rounded bg-blue-500 hover:bg-blue-600 text-white text-xl"
-                onClick={() => onCreate(exercise)}
               >
                 Create
               </button>
