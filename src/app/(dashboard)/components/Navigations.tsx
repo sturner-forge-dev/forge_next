@@ -7,7 +7,7 @@ import { LogoutLink } from '@kinde-oss/kinde-auth-nextjs/components' // Changed 
 const links = [
   { href: '/home', label: 'home' },
   { href: '/exercises', label: 'exercises' },
-  { href: '/profile', label: 'profile' },
+  { href: '/profile/user', label: 'profile' },
   { href: '/settings', label: 'settings' },
   { href: '/about', label: 'about' }
 ]

@@ -22,10 +22,12 @@ export type Exercise = {
 }
 
 export type CustomExercise = {
-  user: User
   name: string
+  id: string
   type: string | null
   equipment: string | null
   difficulty: string | null
   description: string | null
+  createdAt: Date
+  userId: string
 }

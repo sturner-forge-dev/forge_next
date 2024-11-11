@@ -223,7 +223,9 @@ export default function ExerciseTable({
         <CreateCustomExerciseModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          onCreate={(exercise) => createExerciseAction(exercise, user)}
+          onCreate={async (exercise) => {
+            await createExerciseAction(exercise, user)
+          }}
           user={user}
         />
       )}

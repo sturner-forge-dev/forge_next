@@ -10,7 +10,7 @@ async function main() {
       name: 'Squat',
       type: 'Lower Body',
       equipment: 'Barbell, Squat Rack',
-      difficulty: 'Hard',
+      difficulty: 'Advanced',
       description:
         'A compound exercise where you bend your knees and hips to lower your body down, then stand back up. Primarily targets legs and core.'
     },
@@ -18,7 +18,7 @@ async function main() {
       name: 'Deadlift',
       type: 'Full Body',
       equipment: 'Barbell',
-      difficulty: 'Hard',
+      difficulty: 'Advanced',
       description:
         'Lift a barbell from the ground to hip level while maintaining a straight back. Works almost every major muscle group.'
     },
@@ -26,7 +26,7 @@ async function main() {
       name: 'Push-ups',
       type: 'Upper Body',
       equipment: 'None',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description:
         'A bodyweight exercise where you lower and raise your body using your arms. Targets chest, shoulders, and triceps.'
     },
@@ -34,7 +34,7 @@ async function main() {
       name: 'Dumbbell Rows',
       type: 'Upper Body',
       equipment: 'Dumbbells',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description:
         'Bend over and pull a dumbbell towards your hip. Great for back and bicep development.'
     },
@@ -42,7 +42,7 @@ async function main() {
       name: 'Leg Press',
       type: 'Lower Body',
       equipment: 'Leg Press Machine',
-      difficulty: 'Medium',
+      difficulty: 'Intermediate',
       description:
         'Push weight away from your body using your legs while seated. Targets quadriceps, hamstrings, and glutes.'
     },
@@ -50,7 +50,7 @@ async function main() {
       name: 'Shoulder Press',
       type: 'Upper Body',
       equipment: 'Dumbbells',
-      difficulty: 'Medium',
+      difficulty: 'Intermediate',
       description:
         'Press dumbbells overhead from shoulder level. Builds shoulder strength and stability.'
     },
@@ -58,7 +58,7 @@ async function main() {
       name: 'Lat Pulldown',
       type: 'Upper Body',
       equipment: 'Cable Machine',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description:
         'Pull a bar down to your chest while seated. Targets back muscles, particularly the latissimus dorsi.'
     },
@@ -66,7 +66,7 @@ async function main() {
       name: 'Romanian Deadlift',
       type: 'Lower Body',
       equipment: 'Barbell',
-      difficulty: 'Medium',
+      difficulty: 'Intermediate',
       description:
         'A hip-hinge movement where you lower the weight while keeping legs mostly straight. Targets hamstrings and lower back.'
     },
@@ -74,7 +74,7 @@ async function main() {
       name: 'Bench Press',
       type: 'Upper Body',
       equipment: 'Barbell, Bench',
-      difficulty: 'Hard',
+      difficulty: 'Advanced',
       description:
         'Lie on a bench and press a barbell up from chest level. Primary chest exercise that also works shoulders and triceps.'
     },
@@ -82,7 +82,7 @@ async function main() {
       name: 'Pull-ups',
       type: 'Upper Body',
       equipment: 'Pull-up Bar',
-      difficulty: 'Hard',
+      difficulty: 'Advanced',
       description:
         'Hang from a bar and pull yourself up until your chin is over the bar. Excellent for back and bicep development.'
     },
@@ -90,7 +90,7 @@ async function main() {
       name: 'Lunges',
       type: 'Lower Body',
       equipment: 'None',
-      difficulty: 'Medium',
+      difficulty: 'Intermediate',
       description:
         'Step forward and lower your back knee toward the ground. Great for leg strength and balance.'
     },
@@ -98,7 +98,7 @@ async function main() {
       name: 'Dips',
       type: 'Upper Body',
       equipment: 'Parallel Bars',
-      difficulty: 'Medium',
+      difficulty: 'Intermediate',
       description:
         'Lower and raise your body between parallel bars. Works chest, shoulders, and triceps.'
     },
@@ -106,7 +106,7 @@ async function main() {
       name: 'Calf Raises',
       type: 'Lower Body',
       equipment: 'None',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description:
         'Rise up onto your toes and lower back down. Targets calf muscles.'
     },
@@ -114,7 +114,7 @@ async function main() {
       name: 'Face Pulls',
       type: 'Upper Body',
       equipment: 'Cable Machine',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description:
         'Pull a rope attachment towards your face. Great for rear deltoids and upper back.'
     },
@@ -122,7 +122,7 @@ async function main() {
       name: 'Glute Bridge',
       type: 'Lower Body',
       equipment: 'None',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description:
         'Lie on your back and lift your hips toward the ceiling. Targets glutes and lower back.'
     },
@@ -130,7 +130,7 @@ async function main() {
       name: 'Tricep Extensions',
       type: 'Upper Body',
       equipment: 'Dumbbells',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description:
         'Lower weight behind your head and extend arms. Isolates triceps muscles.'
     },
@@ -138,7 +138,7 @@ async function main() {
       name: 'Leg Extensions',
       type: 'Lower Body',
       equipment: 'Machine',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description:
         'Extend your legs from a seated position. Isolates quadriceps muscles.'
     },
@@ -146,7 +146,7 @@ async function main() {
       name: 'Bicep Curls',
       type: 'Upper Body',
       equipment: 'Dumbbells',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description:
         'Curl weights from hip level to shoulder level. Primary bicep exercise.'
     },
@@ -154,7 +154,7 @@ async function main() {
       name: 'Hip Thrust',
       type: 'Lower Body',
       equipment: 'Bench, Barbell',
-      difficulty: 'Medium',
+      difficulty: 'Intermediate',
       description:
         'Drive hips up while upper back rests on a bench. Excellent glute developer.'
     },
@@ -162,7 +162,7 @@ async function main() {
       name: 'Incline Bench Press',
       type: 'Upper Body',
       equipment: 'Bench, Barbell',
-      difficulty: 'Hard',
+      difficulty: 'Advanced',
       description:
         'Bench press performed on an inclined bench. Emphasizes upper chest.'
     },
@@ -170,7 +170,7 @@ async function main() {
       name: 'Bulgarian Split Squat',
       type: 'Lower Body',
       equipment: 'Bench',
-      difficulty: 'Hard',
+      difficulty: 'Advanced',
       description:
         'Single-leg squat with rear foot elevated. Great for leg development and balance.'
     },
@@ -178,7 +178,7 @@ async function main() {
       name: 'Cable Flyes',
       type: 'Upper Body',
       equipment: 'Cable Machine',
-      difficulty: 'Medium',
+      difficulty: 'Intermediate',
       description:
         'Bring cable handles together in front of chest. Isolates chest muscles.'
     },
@@ -186,7 +186,7 @@ async function main() {
       name: 'Leg Curls',
       type: 'Lower Body',
       equipment: 'Machine',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description:
         'Curl weight using legs from prone position. Targets hamstrings.'
     },
@@ -194,7 +194,7 @@ async function main() {
       name: 'Lateral Raises',
       type: 'Upper Body',
       equipment: 'Dumbbells',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description:
         'Raise arms out to sides until parallel with ground. Works lateral deltoids.'
     },
@@ -202,7 +202,7 @@ async function main() {
       name: 'Box Jumps',
       type: 'Lower Body',
       equipment: 'Plyo Box',
-      difficulty: 'Medium',
+      difficulty: 'Intermediate',
       description:
         'Jump onto raised platform with both feet. Develops explosive power.'
     },
@@ -210,7 +210,7 @@ async function main() {
       name: 'Hammer Curls',
       type: 'Upper Body',
       equipment: 'Dumbbells',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description:
         'Bicep curls with palms facing each other. Works biceps and forearms.'
     },
@@ -218,7 +218,7 @@ async function main() {
       name: 'Good Mornings',
       type: 'Lower Body',
       equipment: 'Barbell',
-      difficulty: 'Medium',
+      difficulty: 'Intermediate',
       description:
         'Bend forward at hips with barbell on shoulders. Targets lower back and hamstrings.'
     },
@@ -226,7 +226,7 @@ async function main() {
       name: 'Reverse Flyes',
       type: 'Upper Body',
       equipment: 'Dumbbells',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description:
         'Bend forward and raise arms out to sides. Works rear deltoids.'
     },
@@ -234,7 +234,7 @@ async function main() {
       name: 'Crunches',
       type: 'Core',
       equipment: 'None',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description:
         'Lie on back and curl upper body toward knees. Basic abdominal exercise.'
     },
@@ -242,7 +242,7 @@ async function main() {
       name: 'Russian Twists',
       type: 'Core',
       equipment: 'Weight Plate',
-      difficulty: 'Medium',
+      difficulty: 'Intermediate',
       description:
         'Seated twist holding weight, feet off ground. Works obliques and core.'
     },
@@ -250,7 +250,7 @@ async function main() {
       name: 'Plank',
       type: 'Core',
       equipment: 'None',
-      difficulty: 'Medium',
+      difficulty: 'Intermediate',
       description:
         'Hold push-up position on forearms. Builds core stability and endurance.'
     },
@@ -258,7 +258,7 @@ async function main() {
       name: 'Cable Woodchops',
       type: 'Core',
       equipment: 'Cable Machine',
-      difficulty: 'Medium',
+      difficulty: 'Intermediate',
       description:
         'Pull cable diagonally across body. Works core rotation and stability.'
     },
@@ -266,14 +266,14 @@ async function main() {
       name: 'Back Extensions',
       type: 'Lower Body',
       equipment: 'Bench',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description: 'Extend torso up from bent position. Strengthens lower back.'
     },
     {
       name: 'Front Raises',
       type: 'Upper Body',
       equipment: 'Dumbbells',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description:
         'Raise arms in front of body to shoulder height. Works front deltoids.'
     },
@@ -281,7 +281,7 @@ async function main() {
       name: 'Seated Calf Raises',
       type: 'Lower Body',
       equipment: 'Machine',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description:
         'Raise heels while seated with weight on knees. Targets soleus muscle.'
     },
@@ -289,7 +289,7 @@ async function main() {
       name: 'Decline Push-ups',
       type: 'Upper Body',
       equipment: 'Bench',
-      difficulty: 'Medium',
+      difficulty: 'Intermediate',
       description:
         'Push-ups with feet elevated. Emphasizes upper chest and front deltoids.'
     },
@@ -297,7 +297,7 @@ async function main() {
       name: 'Side Planks',
       type: 'Core',
       equipment: 'None',
-      difficulty: 'Medium',
+      difficulty: 'Intermediate',
       description:
         'Hold body sideways supported on one forearm. Works obliques and core stability.'
     },
@@ -305,7 +305,7 @@ async function main() {
       name: 'Wrist Curls',
       type: 'Upper Body',
       equipment: 'Dumbbells',
-      difficulty: 'Easy',
+      difficulty: 'Beginner',
       description: 'Curl weight using just wrists. Develops forearm strength.'
     }
   ]
