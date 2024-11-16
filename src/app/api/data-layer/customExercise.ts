@@ -25,5 +25,6 @@ export const getCustomExercises = async (userId: string) => {
   const customExercises = await prisma.customExercise.findMany({
     where: { userId: userId }
   })
+
   return customExercises
 }

@@ -2,14 +2,14 @@
 
 import { useState } from 'react'
 import CreateCustomExerciseModal from './CreateCustomExerciseModal'
-import TableNavigation from './TableNavigation'
+import TableNavigation from '@/app/components/TableNavigation'
 import Link from 'next/link'
 import {
   type Exercise,
   type ExerciseSortField,
-  type SortDirection,
-  User
+  type SortDirection
 } from '@/app/types'
+import { User } from '@prisma/client'
 import { ArrowUpIcon, ArrowDownIcon } from '@heroicons/react/24/outline'
 import { createExerciseAction } from '../actions/exercises'
 import { Button } from '@/app/components/catalyst/button'

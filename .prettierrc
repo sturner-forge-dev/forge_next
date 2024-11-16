@@ -1,6 +1,7 @@
 {
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "none",
-    "tabWidth": 2
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "tabWidth": 2,
+  "ignore": ["node_modules", "dist", "src/app/components/catalyst"]
 }

@@ -29,7 +29,7 @@ export function ProfileNavigation() {
   const pathname = usePathname()
 
   return (
-    <div>
+    <div className="w-[90%] mx-auto pt-4">
       <div>
         <nav
           aria-label="Tabs"

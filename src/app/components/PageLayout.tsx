@@ -3,5 +3,5 @@ export default function PageLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <div className="px-4 sm:px-6 lg:px-8 mt-12">{children}</div>
+  return <div className="w-[90%] mx-auto mt-12 h-full pb-12">{children}</div>
 }

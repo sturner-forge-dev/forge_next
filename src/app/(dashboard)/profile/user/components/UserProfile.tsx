@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { updateUserAction } from '../../actions'
 import { useRouter } from 'next/navigation'
 import { useUser } from '../UserContext'
+import { User } from '@prisma/client'
 
 // Components
 import PageLayout from '@/app/components/PageLayout'
@@ -17,10 +18,10 @@ import { Text } from '@/app/components/catalyst/text'
 import { Textarea } from '@/app/components/catalyst/textarea'
 
 export default function UserProfileForm() {
-  const user = useUser()
+  const { user } = useUser()
   const router = useRouter()
 
-  const [profileUser, setProfileUser] = useState(user)
+  const [profileUser, setProfileUser] = useState<User>(user)
   const [phoneError, setPhoneError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
