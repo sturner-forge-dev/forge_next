@@ -46,6 +46,9 @@ model User {
   firstName       String?
   lastName        String?
   role            String           @default("user")
+
+  bio             String?
+  publicEmail     Boolean          @default(false)
   
   customExercises CustomExercise[]
 }

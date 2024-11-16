@@ -5,6 +5,7 @@ import { type ExerciseSortField, type SortDirection } from '@/app/types'
 import Loading from './loading'
 import { getExercises } from '@/app/api/data-layer/exercise'
 import { getUser } from '@/app/api/data-layer/user'
+import PageLayout from '@/app/components/PageLayout'
 
 export default async function Exercises({
   searchParams
@@ -39,13 +40,15 @@ async function ExercisesContent({
   const exercises = await getExercises(currentPage, itemsPerPage, sortBy, order)
 
   return (
-    <ExerciseTable
-      exercises={exercises}
-      sortBy={sortBy}
-      order={order}
-      page={currentPage}
-      totalPages={totalPages}
-      user={user}
-    />
+    <PageLayout>
+      <ExerciseTable
+        exercises={exercises}
+        sortBy={sortBy}
+        order={order}
+        page={currentPage}
+        totalPages={totalPages}
+        user={user}
+      />
+    </PageLayout>
   )
 }

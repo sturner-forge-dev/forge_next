@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Button } from '@/app/components/catalyst/button'
 
 interface TableNavigationProps {
   page: number
@@ -20,34 +21,22 @@ export default function TableNavigation({
       </div>
       <div className="flex gap-2">
         {page <= 1 ? (
-          <button
-            disabled
-            className="px-5 py-3 min-w-40 text-center rounded text-md bg-gray-700 text-gray-400 cursor-not-allowed font-semibold"
-          >
+          <Button color="dark/zinc" disabled>
             Previous
-          </button>
+          </Button>
         ) : (
-          <Link
-            href={getPageLink(page - 1)}
-            className="px-5 py-3 min-w-40 text-center rounded text-md bg-indigo-600 text-white hover:bg-indigo-500 font-semibold"
-          >
-            Previous
+          <Link href={getPageLink(page - 1)}>
+            <Button color="indigo">Previous</Button>
           </Link>
         )}
 
         {page >= totalPages ? (
-          <button
-            disabled
-            className="px-5 py-3 min-w-40 text-center rounded text-md bg-gray-700 text-gray-400 cursor-not-allowed font-semibold"
-          >
+          <Button color="dark/zinc" disabled>
             Next
-          </button>
+          </Button>
         ) : (
-          <Link
-            href={getPageLink(page + 1)}
-            className="px-5 py-3 min-w-40 text-center rounded text-md bg-indigo-600 text-white hover:bg-indigo-500 font-semibold"
-          >
-            Next
+          <Link href={getPageLink(page + 1)}>
+            <Button color="indigo">Next</Button>
           </Link>
         )}
       </div>

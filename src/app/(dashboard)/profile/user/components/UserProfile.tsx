@@ -1,8 +1,20 @@
 'use client'
+
 import { useEffect, useState } from 'react'
 import { updateUserAction } from '../../actions'
 import { useRouter } from 'next/navigation'
 import { useUser } from '../UserContext'
+
+// Components
+import PageLayout from '@/app/components/PageLayout'
+import { Button } from '@/app/components/catalyst/button'
+import { Checkbox, CheckboxField } from '@/app/components/catalyst/checkbox'
+import { Divider } from '@/app/components/catalyst/divider'
+import { Label } from '@/app/components/catalyst/fieldset'
+import { Heading, Subheading } from '@/app/components/catalyst/heading'
+import { Input } from '@/app/components/catalyst/input'
+import { Text } from '@/app/components/catalyst/text'
+import { Textarea } from '@/app/components/catalyst/textarea'
 
 export default function UserProfileForm() {
   const user = useUser()
@@ -12,29 +24,32 @@ export default function UserProfileForm() {
   const [phoneError, setPhoneError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const formatPhoneNumber = (phone: string) => {
+    const cleaned = phone.replace(/\D/g, '')
+    if (cleaned.length === 0) return ''
+    if (cleaned.length <= 3) return cleaned
+    if (cleaned.length <= 6)
+      return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`
+    return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(
+      6,
+      10
+    )}`
+  }
 
   const validatePhone = (phone: string) => {
     setPhoneError('')
+    const formatted = formatPhoneNumber(phone)
 
-    const regex = /^\(?([0-9]{3})\)?[-.\s]?([0-9]{3})[-.\s]?([0-9]{4})$/
-    const numericPhoneValue = numericPhone(phone) || ''
-
-    if (!regex.test(phone) && numericPhoneValue.length !== 10) {
-      setPhoneError(
-        'Invalid phone number. Acceptable formats: (xxx) xxx-xxxx, xxx-xxx-xxxx, or xxxxxxxxxx'
-      )
+    if (phone && phone.replace(/\D/g, '').length !== 10) {
+      setPhoneError('Phone number must be 10 digits')
+      return
     }
 
     if (profileUser) {
-      // Add null check
-      setProfileUser({ ...profileUser, phone }) // profileUser is guaranteed to have all required fields
+      setProfileUser({ ...profileUser, phone: formatted })
     }
-  }
-
-  const numericPhone = (phone: string | null) => {
-    if (!phone) return null
-
-    return phone.replace(/\D/g, '')
   }
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,16 +81,27 @@ export default function UserProfileForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setIsSubmitting(true)
+    setErrorMessage('')
+    setSuccessMessage('')
 
     try {
       if (!profileUser) {
         throw new Error('Profile user is undefined')
       }
 
+      if (
+        !profileUser.firstName ||
+        !profileUser.lastName ||
+        !profileUser.email
+      ) {
+        throw new Error('Please fill in all required fields')
+      }
+
       const saveUser = {
         ...user,
         ...profileUser,
-        phone: numericPhone(profileUser?.phone)
+        phone: formatPhoneNumber(profileUser?.phone || '')
       }
 
       const newUser = await updateUserAction(saveUser)
@@ -86,10 +112,19 @@ export default function UserProfileForm() {
         setTimeout(() => setSuccessMessage(''), 3000)
       }
     } catch (error) {
-      setErrorMessage('Error saving profile. Please try again.')
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : 'Error saving profile. Please try again.'
+      )
       console.error(error)
-      setTimeout(() => setErrorMessage(''), 3000)
+    } finally {
+      setIsSubmitting(false)
     }
+  }
+
+  const handleReset = () => {
+    setProfileUser(user)
   }
 
   useEffect(() => {
@@ -97,73 +132,148 @@ export default function UserProfileForm() {
   }, [user])
 
   return (
-    <>
-      <form
-        action="onSubmit"
-        className="flex flex-col gap-4"
-        onSubmit={handleSubmit}
-      >
-        <div className="flex flex-col m-auto">
-          <div className="flex gap-44">
-            <div className="flex flex-col">
-              <h1 className="text-xl py-4">First Name</h1>
-              <input
-                type="text"
-                name="firstName"
-                value={profileUser?.firstName ?? ''}
-                onChange={handleOnChange}
-                className="text-md text-black min-w-60 pl-2 py-1"
-              />
-
-              <h1 className="text-xl py-4">Last Name</h1>
-              <input
-                type="text"
-                name="lastName"
-                value={profileUser?.lastName ?? ''}
-                onChange={handleOnChange}
-                className="text-md text-black min-w-60 pl-2 py-1"
-              />
-            </div>
-
-            <div className="flex flex-col">
-              <h1 className="text-xl py-4">Email</h1>
-              <input
-                type="email"
-                name="email"
-                value={profileUser?.email ?? ''}
-                onChange={handleOnChange}
-                className="text-md text-black min-w-60 pl-2 py-1"
-                required
-              />
-
-              <h1 className="text-xl py-4">Phone</h1>
-              <input
-                type="phone"
-                name="phone"
-                value={profileUser?.phone ?? ''}
-                onChange={handleOnChange}
-                className="text-md text-black min-w-60 pl-2 py-1"
-              />
-              <small className="text-red-400 mt-1">{phoneError}</small>
-            </div>
+    <PageLayout>
+      <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
+        {successMessage && (
+          <div className="mb-4 p-4 bg-green-50 text-green-700 rounded-md">
+            {successMessage}
           </div>
-
-          <div className="flex gap-4 mt-4 justify-end">
-            <button
-              type="submit"
-              className="bg-blue-400 px-4 py-2 rounded-lg text-xl border border-white/50 hover:bg-blue-600"
-            >
-              Save
-            </button>
+        )}
+        {errorMessage && (
+          <div className="mb-4 p-4 bg-red-50 text-red-700 rounded-md">
+            {errorMessage}
           </div>
-          {successMessage && (
-            <p className="text-green-500 mt-2 text-right">{successMessage}</p>
-          )}
-          {errorMessage && (
-            <p className="text-red-500 mt-2 text-right">{errorMessage}</p>
-          )}
+        )}
+
+        <Heading>Profile Settings</Heading>
+        <Divider className="my-10 mt-6" />
+
+        <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+          <div className="space-y-1">
+            <Subheading>User Name</Subheading>
+            <Text>This will be displayed on your public profile.</Text>
+          </div>
+          <div>
+            <Input
+              required
+              aria-label="First Name"
+              name="firstName"
+              value={profileUser?.firstName || ''}
+              onChange={handleOnChange}
+              placeholder="First Name"
+            />
+
+            <Input
+              required
+              className="mt-3"
+              aria-label="Last Name"
+              name="lastName"
+              value={profileUser?.lastName || ''}
+              onChange={handleOnChange}
+              placeholder="Last Name"
+            />
+          </div>
+        </section>
+
+        <Divider className="my-10" soft />
+
+        <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+          <div className="space-y-1">
+            <Subheading>Bio</Subheading>
+            <Text>
+              Tell us a little bit about yourself. This will be displayed on
+              your public profile. Maximum 240 characters.
+            </Text>
+          </div>
+          <div>
+            <Textarea
+              aria-label="Bio"
+              name="bio"
+              value={profileUser?.bio || ''}
+              onChange={(e) =>
+                setProfileUser((prev) => ({ ...prev!, bio: e.target.value }))
+              }
+              maxLength={240}
+              placeholder="Bio"
+            />
+          </div>
+        </section>
+
+        <Divider className="my-10" soft />
+
+        <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+          <div className="space-y-1">
+            <Subheading>Email</Subheading>
+            <Text>(We promise not to spam you.)</Text>
+          </div>
+          <div className="space-y-4">
+            <Input
+              type="email"
+              aria-label="Organization Email"
+              name="email"
+              defaultValue={profileUser?.email || 'info@example.com'}
+              onChange={handleOnChange}
+            />
+            <CheckboxField>
+              <Checkbox
+                name="publicEmail"
+                defaultChecked={profileUser?.publicEmail || false}
+                onChange={(checked: boolean) =>
+                  setProfileUser((prev) => ({
+                    ...prev!,
+                    publicEmail: checked
+                  }))
+                }
+              />
+              <Label>Show email on public profile</Label>
+            </CheckboxField>
+          </div>
+        </section>
+
+        <Divider className="my-10" soft />
+
+        <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+          <div className="space-y-1">
+            <Subheading>Phone Number</Subheading>
+            <Text>
+              This is used to login to your account. Nothing more, nothing less
+            </Text>
+          </div>
+          <div>
+            <Input
+              type="tel"
+              aria-label="Phone Number"
+              name="phone"
+              value={profileUser?.phone || ''}
+              onChange={(e) => validatePhone(e.target.value)}
+              placeholder="(555) 555-5555"
+            />
+            {phoneError && (
+              <Text className="mt-1 text-red-600 text-sm">{phoneError}</Text>
+            )}
+          </div>
+        </section>
+
+        <Divider className="my-10" soft />
+
+        <div className="flex justify-end gap-4">
+          <Button
+            type="reset"
+            onClick={handleReset}
+            disabled={isSubmitting}
+            color="dark/zinc"
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            disabled={isSubmitting || !!phoneError}
+            color="indigo"
+          >
+            {isSubmitting ? 'Saving...' : 'Save changes'}
+          </Button>
         </div>
       </form>
-    </>
+    </PageLayout>
   )
 }

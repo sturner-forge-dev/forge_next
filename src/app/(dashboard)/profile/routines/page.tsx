@@ -1,9 +1,9 @@
 import PageLayout from '@/app/components/PageLayout'
 
-export default function Home() {
+export default function RoutinesPage() {
   return (
     <PageLayout>
-      <div className="p-4">Welcome to the home page!</div>
+      <div>User Routines</div>
     </PageLayout>
   )
 }

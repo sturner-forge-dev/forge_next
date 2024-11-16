@@ -9,8 +9,8 @@ import {
   DialogTitle
 } from '@headlessui/react'
 import Dropdown from './Dropdown'
-import SubmitButton from '@/app/shared/SubmitButton'
-import CancelButton from '@/app/shared/CancelButton'
+import SubmitButton from '@/app/components/SubmitButton'
+import CancelButton from '@/app/components/CancelButton'
 
 interface CreateCustomExerciseModalProps {
   isOpen: boolean

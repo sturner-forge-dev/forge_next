@@ -12,6 +12,7 @@ import {
 } from '@/app/types'
 import { ArrowUpIcon, ArrowDownIcon } from '@heroicons/react/24/outline'
 import { createExerciseAction } from '../actions/exercises'
+import { Button } from '@/app/components/catalyst/button'
 
 interface ExerciseTableProps {
   exercises: Exercise[]
@@ -73,7 +74,7 @@ export default function ExerciseTable({
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 mt-12">
+    <>
       <div className="sm:flex sm:items-center w-[90%] mx-auto">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold text-gray-200">Exercises</h1>
@@ -81,14 +82,10 @@ export default function ExerciseTable({
             A list of all the exercises in your account.
           </p>
         </div>
-        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <button
-            type="button"
-            className="px-5 py-3 min-w-40 text-center rounded text-md bg-indigo-600 text-white hover:bg-indigo-500 font-semibold"
-            onClick={() => setIsModalOpen(true)}
-          >
+        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none mx-4">
+          <Button color="indigo" onClick={() => setIsModalOpen(true)}>
             Create Custom Exercise
-          </button>
+          </Button>
         </div>
       </div>
       <div className="mt-8 flow-root w-[85%] items-center mx-auto">
@@ -211,11 +208,13 @@ export default function ExerciseTable({
                 ))}
               </tbody>
             </table>
-            <TableNavigation
-              page={page}
-              totalPages={totalPages}
-              getPageLink={getPageLink}
-            />
+            <div className="mt-12">
+              <TableNavigation
+                page={page}
+                totalPages={totalPages}
+                getPageLink={getPageLink}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -229,6 +228,6 @@ export default function ExerciseTable({
           user={user}
         />
       )}
-    </div>
+    </>
   )
 }
