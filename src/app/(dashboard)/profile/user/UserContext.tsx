@@ -1,6 +1,6 @@
 'use client'
 
-import { ExerciseSortField, SortDirection, CustomExercise } from '@/app/types'
+import { ExerciseSortField, SortDirection } from '@/app/types'
 import {
   createContext,
   useContext,
@@ -8,7 +8,9 @@ import {
   useState,
   useCallback
 } from 'react'
-import { User } from '@prisma/client'
+import { User, CustomExercise } from '@prisma/client'
+import { getCustomExercises } from '@/app/api/data-layer/customExercise'
+
 interface UserContextType {
   user: User
   customExercises: CustomExercise[]
@@ -22,6 +24,11 @@ interface UserContextType {
     newSortBy: ExerciseSortField,
     newOrder: SortDirection
   ) => void
+  createCustomExerciseAction: (
+    exercise: Omit<CustomExercise, 'id' | 'createdAt'>,
+    user: User
+  ) => Promise<CustomExercise>
+  addCustomExercise: (exercise: CustomExercise) => void
 }
 
 export const UserContext = createContext<UserContextType>({} as UserContextType)
@@ -33,7 +40,8 @@ export function UserProvider({
   sortBy: initialSortBy,
   order: initialOrder,
   currentPage: initialPage,
-  totalPages
+  totalPages,
+  createCustomExerciseAction
 }: {
   children: React.ReactNode
   user: User
@@ -42,39 +50,54 @@ export function UserProvider({
   order: SortDirection
   currentPage: number
   totalPages: number
+  createCustomExerciseAction: (
+    exercise: Omit<CustomExercise, 'id' | 'createdAt'>,
+    user: User
+  ) => Promise<CustomExercise>
 }) {
   const [currentPage, setCurrentPage] = useState(initialPage)
   const [sortBy, setSortBy] = useState(initialSortBy)
   const [order, setOrder] = useState(initialOrder)
-  const [customExercises] = useState(initialExercises)
+  const [customExercises, setCustomExercises] = useState(initialExercises)
 
   const itemsPerPage = 10
 
   const updatePagination = useCallback(
-    (page: number, newSortBy: ExerciseSortField, newOrder: SortDirection) => {
-      setCurrentPage(page)
-      setSortBy(newSortBy)
-      setOrder(newOrder)
+    async (
+      page: number,
+      newSortBy: ExerciseSortField,
+      newOrder: SortDirection
+    ) => {
+      try {
+        const { exercises } = await getCustomExercises(
+          page,
+          itemsPerPage,
+          newSortBy,
+          newOrder,
+          user.id
+        )
+
+        if (exercises.length > 0) {
+          setCurrentPage(page)
+          setSortBy(newSortBy)
+          setOrder(newOrder)
+          setCustomExercises(exercises)
+        }
+      } catch (error) {
+        console.error('Error fetching exercises:', error)
+        throw error
+      }
     },
-    []
+    [user.id]
   )
 
   const paginatedExercises = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage
-    const end = start + itemsPerPage
+    return customExercises
+  }, [customExercises])
 
-    const sortedExercises = [...customExercises].sort((a, b) => {
-      const aValue = a[sortBy]
-      const bValue = b[sortBy]
-
-      if (order === 'asc') {
-        return aValue && bValue ? (aValue > bValue ? 1 : -1) : 0
-      }
-      return aValue && bValue ? (aValue < bValue ? 1 : -1) : 0
-    })
-
-    return sortedExercises.slice(start, end)
-  }, [customExercises, currentPage, sortBy, order])
+  const addCustomExercise = useCallback((exercise: CustomExercise) => {
+    setCustomExercises((prev) => [...prev, exercise])
+  }, [])
 
   return (
     <UserContext.Provider
@@ -86,7 +109,9 @@ export function UserProvider({
         currentPage,
         totalPages,
         paginatedExercises,
-        updatePagination
+        updatePagination,
+        createCustomExerciseAction,
+        addCustomExercise
       }}
     >
       {children}

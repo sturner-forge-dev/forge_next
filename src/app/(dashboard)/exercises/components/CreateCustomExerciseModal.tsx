@@ -15,7 +15,9 @@ import CancelButton from '@/app/components/CancelButton'
 interface CreateCustomExerciseModalProps {
   isOpen: boolean
   onClose: () => void
-  onCreate: (exercise: CustomExercise) => Promise<void>
+  onCreate: (
+    exercise: Omit<CustomExercise, 'id' | 'createdAt'>
+  ) => Promise<void>
   user: User
 }
 
@@ -56,22 +58,41 @@ export default function CreateCustomExerciseModal({
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
-  const [exercise, setExercise] = useState<CustomExercise>({
+  const [exercise, setExercise] = useState<
+    Omit<CustomExercise, 'id' | 'createdAt'>
+  >({
     userId: user.id,
     name: '',
     type: '',
     equipment: '',
     difficulty: '',
-    description: '',
-    createdAt: new Date(),
-    id: ''
+    description: ''
   })
 
   const handleCreateExercise = async () => {
+    if (
+      !exercise.name ||
+      !exercise.type ||
+      !exercise.equipment ||
+      !exercise.difficulty
+    ) {
+      setErrorMessage('Please fill in all required fields')
+      setTimeout(() => setErrorMessage(null), 3000)
+      return
+    }
+
     setIsLoading(true)
     try {
       await onCreate(exercise)
       setSuccessMessage('Exercise created successfully')
+      setExercise({
+        userId: user.id,
+        name: '',
+        type: '',
+        equipment: '',
+        difficulty: '',
+        description: ''
+      })
       setTimeout(() => setSuccessMessage(null), 3000)
     } catch (error) {
       setErrorMessage('Error creating exercise')

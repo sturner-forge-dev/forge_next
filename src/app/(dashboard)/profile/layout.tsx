@@ -9,6 +9,7 @@ import React from 'react'
 import { UserProvider } from './user/UserContext'
 import { SortDirection } from '@/app/types'
 import { ExerciseSortField } from '@/app/types'
+import { createCustomExerciseAction } from '@/app/api/data-layer/customExercise'
 
 export default async function ProfileLayout({
   children,
@@ -23,12 +24,20 @@ export default async function ProfileLayout({
     redirect('/login')
   }
 
-  const customExercises = await getCustomExercises(user.id)
   const sortBy = (searchParams?.sortBy as ExerciseSortField) || ''
   const order = (searchParams?.order as SortDirection) || ''
   const currentPage = Number(searchParams?.page) || 1
   const itemsPerPage = 10
-  const totalPages = Math.ceil(customExercises.length / itemsPerPage)
+
+  const { exercises: customExercises, totalCount } = await getCustomExercises(
+    currentPage,
+    itemsPerPage,
+    sortBy,
+    order,
+    user.id
+  )
+
+  const totalPages = Math.ceil(totalCount / itemsPerPage)
 
   return (
     <UserProvider
@@ -38,6 +47,7 @@ export default async function ProfileLayout({
       order={order}
       currentPage={currentPage}
       totalPages={totalPages}
+      createCustomExerciseAction={createCustomExerciseAction}
     >
       <div className="h-full w-full">
         <div className="sm:hidden">
