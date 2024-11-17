@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { updateUserAction } from '../../actions'
 import { useRouter } from 'next/navigation'
-import { useUser } from '../UserContext'
 import { User } from '@prisma/client'
 
 // Components
@@ -16,9 +15,9 @@ import { Heading, Subheading } from '@/app/components/catalyst/heading'
 import { Input } from '@/app/components/catalyst/input'
 import { Text } from '@/app/components/catalyst/text'
 import { Textarea } from '@/app/components/catalyst/textarea'
+import Messaging from '@/app/components/Messaging'
 
-export default function UserProfileForm() {
-  const { user } = useUser()
+export default function UserProfileForm({ user }: { user: User }) {
   const router = useRouter()
 
   const [profileUser, setProfileUser] = useState<User>(user)
@@ -135,16 +134,10 @@ export default function UserProfileForm() {
   return (
     <PageLayout>
       <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
-        {successMessage && (
-          <div className="mb-4 p-4 bg-green-50 text-green-700 rounded-md">
-            {successMessage}
-          </div>
-        )}
-        {errorMessage && (
-          <div className="mb-4 p-4 bg-red-50 text-red-700 rounded-md">
-            {errorMessage}
-          </div>
-        )}
+        <Messaging
+          successMessage={successMessage}
+          errorMessage={errorMessage}
+        />
 
         <Heading>Profile Settings</Heading>
         <Divider className="my-10 mt-6" />

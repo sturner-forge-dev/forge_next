@@ -2,12 +2,8 @@
 
 import TableNavigation from '@/app/components/TableNavigation'
 import Link from 'next/link'
-import {
-  type Exercise,
-  type ExerciseSortField,
-  type SortDirection
-} from '@/app/types'
-import { CustomExercise, User } from '@prisma/client'
+import { type ExerciseSortField, type SortDirection } from '@/app/types'
+import { Exercise, CustomExercise, User } from '@prisma/client'
 import SortIcon from '@/app/components/SortIcon'
 import { getSortLink, getPageLink } from '@/app/helpers/helpers'
 

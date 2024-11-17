@@ -1,14 +1,14 @@
 'use client'
 
 import { useRouter, usePathname } from 'next/navigation'
-import { UserProfile } from './UserProfile'
-import { User } from '@/app/types'
+import { User } from '@prisma/client'
 import {
   ChartBarIcon,
   BookOpenIcon,
   UserIcon,
   PencilSquareIcon
 } from '@heroicons/react/20/solid'
+import UserProfile from '../user/components/UserProfile'
 
 const tabs = [
   { name: 'My Profile', value: 'user', icon: UserIcon },

@@ -2,16 +2,20 @@
 
 import { CustomExercise, User } from '@prisma/client'
 import { useState } from 'react'
-import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  DialogTitle
-} from '@headlessui/react'
+import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import Dropdown from './Dropdown'
-import SubmitButton from '@/app/components/SubmitButton'
-import CancelButton from '@/app/components/CancelButton'
-
+import { Button } from '@/app/components/catalyst/button'
+import { Divider } from '@/app/components/catalyst/divider'
+import { Heading, Subheading } from '@/app/components/catalyst/heading'
+import { DarkInput } from '@/app/components/DarkInput'
+import { Text } from '@/app/components/catalyst/text'
+import { DarkTextarea } from '@/app/components/DarkTextArea'
+import {
+  exerciseTypes,
+  equipmentTypes,
+  difficultyLevels
+} from '../constants/constants'
+import Messaging from '@/app/components/Messaging'
 interface CreateCustomExerciseModalProps {
   isOpen: boolean
   onClose: () => void
@@ -20,34 +24,6 @@ interface CreateCustomExerciseModalProps {
   ) => Promise<void>
   user: User
 }
-
-const exerciseTypes = [
-  { label: 'Cardio', id: 1 },
-  { label: 'Strength', id: 2 },
-  { label: 'Flexibility', id: 3 },
-  { label: 'Balance', id: 4 },
-  { label: 'Endurance', id: 5 },
-  { label: 'Full Body', id: 6 },
-  { label: 'Upper Body', id: 7 },
-  { label: 'Other', id: 8 }
-]
-
-const equipmentTypes = [
-  { label: 'Bodyweight', id: 1 },
-  { label: 'Machine', id: 2 },
-  { label: 'Barbell', id: 3 },
-  { label: 'Dumbbell', id: 4 },
-  { label: 'Kettlebell', id: 5 },
-  { label: 'Cable Machine', id: 6 },
-  { label: 'None', id: 7 },
-  { label: 'Other', id: 8 }
-]
-
-const difficultyLevels = [
-  { label: 'Beginner', id: 1 },
-  { label: 'Intermediate', id: 2 },
-  { label: 'Advanced', id: 3 }
-]
 
 export default function CreateCustomExerciseModal({
   isOpen,
@@ -70,17 +46,6 @@ export default function CreateCustomExerciseModal({
   })
 
   const handleCreateExercise = async () => {
-    if (
-      !exercise.name ||
-      !exercise.type ||
-      !exercise.equipment ||
-      !exercise.difficulty
-    ) {
-      setErrorMessage('Please fill in all required fields')
-      setTimeout(() => setErrorMessage(null), 3000)
-      return
-    }
-
     setIsLoading(true)
     try {
       await onCreate(exercise)
@@ -107,137 +72,158 @@ export default function CreateCustomExerciseModal({
     <Dialog open={isOpen} onClose={onClose} className="relative z-10">
       <DialogBackdrop
         transition
-        className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
+        className="fixed inset-0 bg-black/70 bg-opacity-75 transition-opacity backdrop-blur-sm"
       />
 
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
           <DialogPanel
             transition
-            className="relative transform rounded-lg bg-white text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-2xl data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95"
+            className="relative w-full max-w-2xl transform rounded-lg bg-gray-900 p-6 text-left shadow-xl transition-all"
           >
-            <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-              <div className="sm:flex sm:items-start">
-                <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                  <DialogTitle
-                    as="h3"
-                    className="text-base font-semibold text-gray-900"
-                  >
-                    Create Custom Exercise
-                  </DialogTitle>
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      Create a custom exercise to add to your workout.
-                    </p>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Exercises you create are private to you and are viewable
-                      on your profile.
-                    </p>
-                  </div>
-                </div>
-              </div>
+            <Heading className="text-white">Create Custom Exercise</Heading>
+            <Text className="mt-2 text-gray-300">
+              Create a custom exercise to add to your workout. Exercises you
+              create are private to you and are viewable on your profile.
+            </Text>
 
-              <form action="submit">
-                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                  <div className="sm:col-span-4">
-                    <label
-                      htmlFor="name"
-                      className="block text-sm/6 font-medium text-gray-900"
-                    >
-                      Exercise Name
-                    </label>
-                    <div className="mt-2">
-                      <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                        <input
-                          id="name"
-                          name="name"
-                          type="text"
-                          placeholder="Exercise Name"
-                          className="block flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm/6"
-                          value={exercise.name}
-                          onChange={(e) =>
-                            setExercise({ ...exercise, name: e.target.value })
-                          }
-                        />
-                      </div>
-                    </div>
+            <Divider className="my-6 border-gray-700" />
+
+            <Messaging
+              successMessage={successMessage}
+              errorMessage={errorMessage}
+            />
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                handleCreateExercise()
+              }}
+            >
+              <div className="space-y-8">
+                <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+                  <div className="space-y-1">
+                    <Subheading className="text-white">
+                      Exercise Details
+                    </Subheading>
+                    <Text className="text-gray-300">
+                      Basic information about your exercise.
+                    </Text>
                   </div>
-                  <div className="sm:col-span-4">
+                  <div className="space-y-4">
+                    <DarkInput
+                      required
+                      aria-label="Exercise Name"
+                      value={exercise.name}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setExercise({ ...exercise, name: e.target.value })
+                      }
+                      placeholder="Exercise Name"
+                    />
+                  </div>
+                </section>
+
+                <Divider soft className="border-gray-700" />
+
+                <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+                  <div className="space-y-1">
+                    <Subheading className="text-white">
+                      Exercise Type
+                    </Subheading>
+                    <Text className="text-gray-300">
+                      Select the category that best fits this exercise.
+                    </Text>
+                  </div>
+                  <div className="space-y-4">
                     <Dropdown
                       options={exerciseTypes}
                       label="Exercise Type"
                       value={exercise.type}
-                      onChange={(value) => {
+                      onChange={(value) =>
                         setExercise({ ...exercise, type: value })
-                      }}
+                      }
                     />
                   </div>
-                  <div className="sm:col-span-4">
+                </section>
+
+                <Divider soft className="border-gray-700" />
+
+                <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+                  <div className="space-y-1">
+                    <Subheading className="text-white">
+                      Equipment & Difficulty
+                    </Subheading>
+                    <Text className="text-gray-300">
+                      Specify the required equipment and skill level.
+                    </Text>
+                  </div>
+                  <div className="space-y-4">
                     <Dropdown
                       options={equipmentTypes}
                       label="Equipment Type"
                       value={exercise.equipment}
-                      onChange={(value) => {
+                      onChange={(value) =>
                         setExercise({ ...exercise, equipment: value })
-                      }}
+                      }
                     />
-                  </div>
-                  <div className="sm:col-span-4">
                     <Dropdown
                       options={difficultyLevels}
                       label="Difficulty Level"
                       value={exercise.difficulty}
-                      onChange={(value) => {
+                      onChange={(value) =>
                         setExercise({ ...exercise, difficulty: value })
-                      }}
+                      }
                     />
                   </div>
-                  <div className="sm:col-span-4">
-                    <label
-                      htmlFor="description"
-                      className="block text-sm/6 font-medium text-gray-900"
-                    >
-                      Add your comment
-                    </label>
-                    <div className="mt-2">
-                      <textarea
-                        id="description"
-                        name="description"
-                        rows={4}
-                        className="block w-full rounded-md border-0 py-2 pl-3 text-gray-900 placeholder:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
-                        placeholder="Exercise Description"
-                        onChange={(e) =>
-                          setExercise({
-                            ...exercise,
-                            description: e.target.value
-                          })
-                        }
-                      />
-                    </div>
+                </section>
+
+                <Divider soft className="border-gray-700" />
+
+                <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+                  <div className="space-y-1">
+                    <Subheading className="text-white">Description</Subheading>
+                    <Text className="text-gray-300">
+                      Provide details about how to perform this exercise.
+                    </Text>
                   </div>
+                  <div>
+                    <DarkTextarea
+                      aria-label="Exercise Description"
+                      value={exercise.description || ''}
+                      onChange={(e) =>
+                        setExercise({
+                          ...exercise,
+                          description: e.target.value
+                        })
+                      }
+                      placeholder="Exercise Description"
+                    />
+                  </div>
+                </section>
+
+                <Divider soft className="border-gray-700" />
+
+                <div className="flex justify-end gap-4">
+                  <Button
+                    type="button"
+                    onClick={onClose}
+                    disabled={isLoading}
+                    color="dark/zinc"
+                    className="bg-gray-700 hover:bg-gray-600 text-white"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={isLoading}
+                    color="indigo"
+                    className="bg-indigo-600 hover:bg-indigo-500 text-white"
+                  >
+                    {isLoading ? 'Creating...' : 'Create Exercise'}
+                  </Button>
                 </div>
-              </form>
-            </div>
-            <div className="bg-gray-50 px-4 py-3 sm:px-6">
-              <div className="flex justify-end gap-2">
-                <CancelButton label="Close" onClick={onClose} />
-                <SubmitButton
-                  label="Create"
-                  onClick={handleCreateExercise}
-                  isLoading={isLoading}
-                />
               </div>
-              {(errorMessage || successMessage) && (
-                <div className="mt-2 flex justify-end px-8">
-                  {errorMessage && (
-                    <p className="text-red-500">{errorMessage}</p>
-                  )}
-                  {successMessage && (
-                    <p className="text-green-500">{successMessage}</p>
-                  )}
-                </div>
-              )}
-            </div>
+            </form>
           </DialogPanel>
         </div>
       </div>
