@@ -1,11 +1,11 @@
 'use server'
 
-import { createCustomExercise } from '@/app/api/data-layer/customExercise'
-import { type CustomExercise, type User } from '@/app/types'
+import { createCustomExerciseAction } from '@/app/api/data-layer/customExercise'
+import { CustomExercise, User } from '@prisma/client'
 
 export async function createExerciseAction(
   exercise: CustomExercise,
   user: User
 ) {
-  return createCustomExercise(exercise, user)
+  return createCustomExerciseAction(exercise, user)
 }

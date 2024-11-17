@@ -9,10 +9,21 @@ import {
   type ExerciseSortField,
   type SortDirection
 } from '@/app/types'
-import { User } from '@prisma/client'
-import { ArrowUpIcon, ArrowDownIcon } from '@heroicons/react/24/outline'
-import { createExerciseAction } from '../actions/exercises'
+import { CustomExercise, User } from '@prisma/client'
+import SortIcon from '@/app/components/SortIcon'
+
+// Catalyst
 import { Button } from '@/app/components/catalyst/button'
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableHeader,
+  TableCell
+} from '@/app/components/catalyst/table'
+import { Heading } from '@/app/components/catalyst/heading'
+import { Divider } from '@/app/components/catalyst/divider'
 
 interface ExerciseTableProps {
   exercises: Exercise[]
@@ -21,10 +32,10 @@ interface ExerciseTableProps {
   page: number
   totalPages: number
   user: User
-}
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
+  createExerciseAction: (
+    exercise: CustomExercise,
+    user: User
+  ) => Promise<CustomExercise>
 }
 
 export default function ExerciseTable({
@@ -33,25 +44,10 @@ export default function ExerciseTable({
   order,
   page,
   totalPages,
-  user
+  user,
+  createExerciseAction
 }: ExerciseTableProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
-
-  const SortIcon = ({ currentField }: { currentField: string }) => {
-    return (
-      <span className="inline-flex w-4 ml-1 justify-center">
-        {currentField === sortBy ? (
-          order === 'asc' ? (
-            <ArrowUpIcon className="text-black size-3.5 font-bold" />
-          ) : (
-            <ArrowDownIcon className="text-black size-3.5 font-bold" />
-          )
-        ) : (
-          <ArrowUpIcon className="text-transparent size-3.5 font-bold" />
-        )}
-      </span>
-    )
-  }
 
   const getSortLink = (field: string) => {
     if (field !== sortBy) {
@@ -75,149 +71,107 @@ export default function ExerciseTable({
 
   return (
     <>
-      <div className="sm:flex sm:items-center w-[90%] mx-auto">
-        <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold text-gray-200">Exercises</h1>
-          <p className="mt-2 text-sm text-gray-300">
-            A list of all the exercises in your account.
-          </p>
-        </div>
-        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none mx-4">
+      <div className="space-y-6 max-w-6xl mx-auto">
+        <div className="flex justify-between items-center">
+          <Heading>Exercises</Heading>
           <Button color="indigo" onClick={() => setIsModalOpen(true)}>
             Create Custom Exercise
           </Button>
         </div>
-      </div>
-      <div className="mt-8 flow-root w-[85%] items-center mx-auto">
-        <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle">
-            <table className="min-w-full border-separate border-spacing-0 min-h-auto table-fixed">
-              <thead>
-                <tr>
-                  <th
-                    scope="col"
-                    className="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8 w-[35%]"
+        <Divider className="my-10 mt-6" />
+
+        <div className="overflow-x-auto w-full">
+          <Table striped className="w-full">
+            <TableHead className="bg-white/75">
+              <TableRow className="text-gray-900">
+                <TableHeader className="w-[25%]">
+                  <Link
+                    href={getSortLink('name')}
+                    className="inline-flex items-center"
                   >
-                    <Link
-                      href={getSortLink('name')}
-                      className="hover:text-gray-800/90 px-2 py-1 rounded inline-flex items-center"
-                    >
-                      Name <SortIcon currentField="name" />
-                    </Link>
-                  </th>
-                  <th
-                    scope="col"
-                    className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:table-cell w-[20%]"
+                    Name
+                    <SortIcon
+                      currentField="name"
+                      sortBy={sortBy}
+                      order={order}
+                    />
+                  </Link>
+                </TableHeader>
+                <TableHeader className="w-[20%]">
+                  <Link
+                    href={getSortLink('type')}
+                    className="inline-flex items-center"
                   >
-                    <Link
-                      href={getSortLink('type')}
-                      className="hover:text-gray-800/90 px-2 py-1 rounded"
-                    >
-                      Type <SortIcon currentField="type" />
-                    </Link>
-                  </th>
-                  <th
-                    scope="col"
-                    className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter lg:table-cell w-[20%]"
+                    Type
+                    <SortIcon
+                      currentField="type"
+                      sortBy={sortBy}
+                      order={order}
+                    />
+                  </Link>
+                </TableHeader>
+                <TableHeader className="w-[20%]">
+                  <Link
+                    href={getSortLink('equipment')}
+                    className="inline-flex items-center"
                   >
-                    <Link
-                      href={getSortLink('equipment')}
-                      className="hover:text-gray-800/90 px-2 py-1 rounded"
-                    >
-                      Equipment <SortIcon currentField="equipment" />
-                    </Link>
-                  </th>
-                  <th
-                    scope="col"
-                    className="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter w-[15%]"
+                    Equipment
+                    <SortIcon
+                      currentField="equipment"
+                      sortBy={sortBy}
+                      order={order}
+                    />
+                  </Link>
+                </TableHeader>
+                <TableHeader className="min-w-[20%]">
+                  <Link
+                    href={getSortLink('difficulty')}
+                    className="inline-flex items-center"
                   >
-                    <Link
-                      href={getSortLink('difficulty')}
-                      className="hover:text-gray-800/90 px-2 py-1 rounded"
-                    >
-                      Difficulty <SortIcon currentField="difficulty" />
-                    </Link>
-                  </th>
-                  <th
-                    scope="col"
-                    className="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-3 pr-4 backdrop-blur backdrop-filter sm:pr-6 lg:pr-8 w-[10%]"
-                  >
-                    <span className="sr-only">View</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {exercises.map((exercise, exerciseIdx) => (
-                  <tr key={exercise.id} className="hover:bg-gray-800/90">
-                    <td
-                      className={classNames(
-                        exerciseIdx !== exercises.length - 1
-                          ? 'border-b border-gray-200'
-                          : '',
-                        'whitespace-nowrap py-4 pl-4 pr-3 text-md font-semibold text-gray-200 sm:pl-6 lg:pl-8 truncate'
-                      )}
-                    >
-                      {exercise.name}
-                    </td>
-                    <td
-                      className={classNames(
-                        exerciseIdx !== exercises.length - 1
-                          ? 'border-b border-gray-200'
-                          : '',
-                        'hidden whitespace-nowrap px-3 py-4 text-md text-gray-300 sm:table-cell'
-                      )}
-                    >
-                      {exercise.type}
-                    </td>
-                    <td
-                      className={classNames(
-                        exerciseIdx !== exercises.length - 1
-                          ? 'border-b border-gray-200'
-                          : '',
-                        'hidden whitespace-nowrap px-3 py-4 text-md text-gray-300 lg:table-cell'
-                      )}
-                    >
-                      {exercise.equipment}
-                    </td>
-                    <td
-                      className={classNames(
-                        exerciseIdx !== exercises.length - 1
-                          ? 'border-b border-gray-200'
-                          : '',
-                        'whitespace-nowrap px-3 py-4 text-md text-gray-300'
-                      )}
-                    >
-                      {exercise.difficulty?.toUpperCase()}
-                    </td>
-                    <td
-                      className={classNames(
-                        exerciseIdx !== exercises.length - 1
-                          ? 'border-b border-gray-200'
-                          : '',
-                        'relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-md font-semibold sm:pr-8 lg:pr-8'
-                      )}
-                    >
-                      <a
-                        href="#"
-                        className="text-indigo-300 hover:text-indigo-500"
-                      >
-                        View<span className="sr-only">, {exercise.name}</span>
-                      </a>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className="mt-12">
-              <TableNavigation
-                page={page}
-                totalPages={totalPages}
-                getPageLink={getPageLink}
-              />
-            </div>
-          </div>
+                    Difficulty
+                    <SortIcon
+                      currentField="difficulty"
+                      sortBy={sortBy}
+                      order={order}
+                    />
+                  </Link>
+                </TableHeader>
+                <TableHeader className="min-w-[5%]" />
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {exercises.map((exercise) => (
+                <TableRow key={exercise.id} href="#">
+                  <TableCell className="w-[25%] whitespace-nowrap truncate">
+                    <div className="truncate">{exercise.name}</div>
+                  </TableCell>
+                  <TableCell className="w-[20%] whitespace-nowrap truncate">
+                    <div className="truncate">{exercise.type}</div>
+                  </TableCell>
+                  <TableCell className="w-[20%] whitespace-nowrap truncate">
+                    <div className="truncate">{exercise.equipment}</div>
+                  </TableCell>
+                  <TableCell className="min-w-[20%] whitespace-nowrap truncate">
+                    <div className="truncate">{exercise.difficulty}</div>
+                  </TableCell>
+                  <TableCell className="min-w-[5%] whitespace-nowrap truncate">
+                    <div className="text-right">
+                      <Button outline>View</Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </div>
+
+        <TableNavigation
+          page={page}
+          totalPages={totalPages}
+          getPageLink={getPageLink}
+        />
       </div>
+
       {isModalOpen && (
         <CreateCustomExerciseModal
           isOpen={isModalOpen}

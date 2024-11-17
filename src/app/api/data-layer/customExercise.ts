@@ -1,7 +1,9 @@
-import { CustomExercise, User } from '@/app/types'
+'use server'
+
+import { CustomExercise, User } from '@prisma/client'
 import { prisma } from '@/app/utils/db'
 
-export const createCustomExercise = async (
+export const createCustomExerciseAction = async (
   exercise: CustomExercise,
   user: User
 ) => {

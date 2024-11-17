@@ -1,6 +1,6 @@
 'use client'
 
-import { User, type CustomExercise } from '@/app/types'
+import { CustomExercise, User } from '@prisma/client'
 import { useState } from 'react'
 import {
   Dialog,

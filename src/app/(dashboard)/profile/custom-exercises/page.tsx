@@ -17,8 +17,8 @@ import { ExerciseSortField, SortDirection } from '@/app/types'
 import PageLayout from '@/app/components/PageLayout'
 import { Heading } from '@/app/components/catalyst/heading'
 import { Divider } from '@/app/components/catalyst/divider'
-import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
+import SortIcon from '@/app/components/SortIcon'
 
 export default function ExercisesPage() {
   const {
@@ -31,22 +31,6 @@ export default function ExercisesPage() {
   } = useUser()
 
   const searchParams = useSearchParams()
-
-  const SortIcon = ({ currentField }: { currentField: string }) => {
-    return (
-      <span className="inline-flex w-4 ml-1 justify-center">
-        {currentField === sortBy ? (
-          order === 'asc' ? (
-            <ArrowUpIcon className="text-black size-3.5 font-bold" />
-          ) : (
-            <ArrowDownIcon className="text-black size-3.5 font-bold" />
-          )
-        ) : (
-          <ArrowUpIcon className="text-transparent size-3.5 font-bold" />
-        )}
-      </span>
-    )
-  }
   const page = Number(searchParams.get('page')) || 1
 
   useEffect(() => {
@@ -85,17 +69,21 @@ export default function ExercisesPage() {
           <Heading>Custom Exercises</Heading>
           <Divider className="my-10 mt-6" />
 
-          <div className="overflow-x-auto">
-            <Table striped className="min-w-full min-h-auto table-fixed">
+          <div className="overflow-x-auto w-full">
+            <Table striped className="w-full">
               <TableHead className="bg-white/75">
                 <TableRow className="text-gray-900">
-                  <TableHeader className="w-[35%]">
+                  <TableHeader className="w-[25%]">
                     <Link
                       href={getSortLink('name')}
                       className="inline-flex items-center"
                     >
                       Name
-                      <SortIcon currentField="name" />
+                      <SortIcon
+                        currentField="name"
+                        sortBy={sortBy}
+                        order={order}
+                      />
                     </Link>
                   </TableHeader>
                   <TableHeader className="w-[20%]">
@@ -104,7 +92,11 @@ export default function ExercisesPage() {
                       className="inline-flex items-center"
                     >
                       Type
-                      <SortIcon currentField="type" />
+                      <SortIcon
+                        currentField="type"
+                        sortBy={sortBy}
+                        order={order}
+                      />
                     </Link>
                   </TableHeader>
                   <TableHeader className="w-[20%]">
@@ -113,48 +105,66 @@ export default function ExercisesPage() {
                       className="inline-flex items-center"
                     >
                       Equipment
-                      <SortIcon currentField="equipment" />
+                      <SortIcon
+                        currentField="equipment"
+                        sortBy={sortBy}
+                        order={order}
+                      />
                     </Link>
                   </TableHeader>
-                  <TableHeader className="w-[15%]">
+                  <TableHeader className="min-w-[20%]">
                     <Link
                       href={getSortLink('difficulty')}
                       className="inline-flex items-center"
                     >
                       Difficulty
-                      <SortIcon currentField="difficulty" />
+                      <SortIcon
+                        currentField="difficulty"
+                        sortBy={sortBy}
+                        order={order}
+                      />
                     </Link>
                   </TableHeader>
-                  <TableHeader className="w-[10%]">
+                  <TableHeader className="min-w-[10%]">
                     <Link
                       href={getSortLink('createdAt')}
                       className="inline-flex items-center"
                     >
                       Created
-                      <SortIcon currentField="createdAt" />
+                      <SortIcon
+                        currentField="createdAt"
+                        sortBy={sortBy}
+                        order={order}
+                      />
                     </Link>
                   </TableHeader>
-                  <TableHeader className="w-[10%]" />
+                  <TableHeader className="w-[5%]" />
                 </TableRow>
               </TableHead>
               <TableBody>
                 {paginatedExercises.map((exercise) => (
                   <TableRow key={exercise.id} href={'#'}>
-                    <TableCell className="truncate">{exercise.name}</TableCell>
-                    <TableCell className="truncate">
-                      {exercise.type || '-'}
+                    <TableCell className="w-[25%] whitespace-nowrap truncate">
+                      <div className="truncate">{exercise.name}</div>
                     </TableCell>
-                    <TableCell className="truncate">
-                      {exercise.equipment || '-'}
+                    <TableCell className="w-[20%] whitespace-nowrap truncate">
+                      <div className="truncate">{exercise.type}</div>
                     </TableCell>
-                    <TableCell className="truncate">
-                      {exercise.difficulty || '-'}
+                    <TableCell className="w-[20%] whitespace-nowrap truncate">
+                      <div className="truncate">{exercise.equipment}</div>
                     </TableCell>
-                    <TableCell className="truncate">
-                      {new Date(exercise.createdAt).toLocaleDateString()}
+                    <TableCell className="min-w-[20%] whitespace-nowrap truncate">
+                      <div className="truncate">{exercise.difficulty}</div>
                     </TableCell>
-                    <TableCell className="text-right">
-                      <Button outline>Edit</Button>
+                    <TableCell className="min-w-[10%] whitespace-nowrap truncate">
+                      <div className="truncate">
+                        {new Date(exercise.createdAt).toLocaleDateString()}
+                      </div>
+                    </TableCell>
+                    <TableCell className="min-w-[5%] whitespace-nowrap truncate">
+                      <div className="text-right">
+                        <Button outline>Edit</Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

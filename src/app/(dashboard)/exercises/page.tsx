@@ -6,6 +6,7 @@ import Loading from './loading'
 import { getExercises } from '@/app/api/data-layer/exercise'
 import { getUser } from '@/app/api/data-layer/user'
 import PageLayout from '@/app/components/PageLayout'
+import { createCustomExerciseAction } from '@/app/api/data-layer/customExercise'
 
 export default async function Exercises({
   searchParams
@@ -48,6 +49,7 @@ async function ExercisesContent({
         page={currentPage}
         totalPages={totalPages}
         user={user}
+        createExerciseAction={createCustomExerciseAction}
       />
     </PageLayout>
   )
