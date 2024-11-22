@@ -27,8 +27,8 @@ const Navigation = ({ user }: { user: boolean }) => {
               href={link.href}
               className={
                 pathname.startsWith(link.value)
-                  ? 'px-5 py-3 min-w-40 text-center rounded text-md bg-indigo-600 text-white hover:bg-indigo-500 font-semibold'
-                  : 'hover:bg-gray-500 px-5 py-3 min-w-40 font-semibold rounded text-center'
+                  ? 'px-5 py-3 min-w-40 text-center rounded-sm text-md bg-indigo-600 text-white hover:bg-indigo-500 font-semibold'
+                  : 'hover:bg-gray-500 px-5 py-3 min-w-40 font-semibold rounded-sm text-center'
               }
             >
               {link.label}
@@ -37,7 +37,7 @@ const Navigation = ({ user }: { user: boolean }) => {
         ))}
         {user ? (
           <li>
-            <LogoutLink className="hover:bg-gray-500 px-5 py-3 min-w-40 font-semibold rounded text-center">
+            <LogoutLink className="hover:bg-gray-500 px-5 py-3 min-w-40 font-semibold rounded-sm text-center">
               logout
             </LogoutLink>
           </li>

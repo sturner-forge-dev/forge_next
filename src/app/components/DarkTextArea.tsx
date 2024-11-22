@@ -13,7 +13,7 @@ export const DarkTextarea = forwardRef<
       className={clsx(
         'bg-white border-gray-700 rounded-md',
         'placeholder-gray-500 focus:border-indigo-500',
-        '[&>textarea]:text-gray-900 [&>textarea]:dark:text-gray-900',
+        '[&>textarea]:text-gray-900 dark:[&>textarea]:text-gray-900',
         props.className
       )}
     />
