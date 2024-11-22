@@ -1,6 +1,7 @@
 import { TableBody, TableCell, TableRow } from '@/app/components/catalyst/table'
 import { Button } from '@/app/components/catalyst/button'
 import { CustomExercise } from '@prisma/client'
+import DifficultyBadge from '@/app/components/DifficultyBadge'
 
 interface CustomExerciseTableBodyProps {
   paginatedExercises: CustomExercise[]
@@ -33,7 +34,9 @@ export default function CustomExerciseTableBody({
             <div className="truncate pr-4">{exercise.equipment}</div>
           </TableCell>
           <TableCell className="w-[17.5%]">
-            <div className="truncate pr-4">{exercise.difficulty}</div>
+            <div className="truncate pr-4">
+              <DifficultyBadge difficulty={exercise.difficulty} />
+            </div>
           </TableCell>
           <TableCell className="w-[12.5%]">
             <div className="truncate pr-4">
