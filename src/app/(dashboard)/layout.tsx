@@ -1,13 +1,13 @@
 import Image from 'next/image'
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
-
-const { getUser } = getKindeServerSession()
-const user = await getUser()
 import Navigation from './components/Navigations'
 import { Suspense } from 'react'
 import Loading from './loading'
+import { getUser } from '@/app/api/data-layer/user'
 
-const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+const user = await getUser()
+const userAvatar = user?.image
+
+const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen w-full relative bg-black/90 text-white overflow-auto">
       <Navigation user={user ? true : false} />
@@ -15,7 +15,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         <header className="h-[60px] border-b border-white/50">
           <div className="h-full w-full px-6 flex items-center justify-end">
             <Image
-              src={'/favicon.ico'}
+              src={userAvatar || '/favicon.ico'}
               alt="logo"
               width={60}
               height={60}

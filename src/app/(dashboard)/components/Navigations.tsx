@@ -17,10 +17,12 @@ const Navigation = ({ user }: { user: boolean }) => {
 
   return (
     <aside className="fixed w-[200px] top-0 left-0 h-screen border-r border-white/50 p-4">
-      <div className="text-xl">Forge Fitness</div>
-      <ul>
+      <div className="text-xl flex justify-center items-center">
+        Forge Fitness
+      </div>
+      <ul className="mt-4 flex flex-col justify-center items-center space-y-6">
         {links.map((link) => (
-          <li key={link.href} className="px-2 py-6">
+          <li key={link.href}>
             <Link
               href={link.href}
               className={
@@ -34,7 +36,7 @@ const Navigation = ({ user }: { user: boolean }) => {
           </li>
         ))}
         {user ? (
-          <li className="px-2 py-6">
+          <li>
             <LogoutLink className="hover:bg-gray-500 px-5 py-3 min-w-40 font-semibold rounded text-center">
               logout
             </LogoutLink>

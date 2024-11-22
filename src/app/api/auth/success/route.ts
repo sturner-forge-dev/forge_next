@@ -21,7 +21,8 @@ export async function GET() {
         kindeId: user.id,
         firstName: user.given_name ?? '',
         lastName: user.family_name ?? '',
-        email: user.email ?? ''
+        email: user.email ?? '',
+        image: user.picture ?? ''
       }
     })
   }
