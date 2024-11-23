@@ -129,7 +129,6 @@ export default function UserProfileForm({ user }: { user: User }) {
 
   useEffect(() => {
     setProfileUser(user)
-    console.log(profileUser)
   }, [user])
 
   return (
