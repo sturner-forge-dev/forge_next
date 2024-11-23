@@ -238,8 +238,8 @@ export default function UserProfileForm({ user }: { user: User }) {
               type="tel"
               aria-label="Phone Number"
               name="phone"
-              value={profileUser?.phone || ''}
-              onChange={(e) => validatePhone(e.target.value)}
+              defaultValue={profileUser?.phone || ''}
+              onChange={handleOnChange}
               placeholder="(555) 555-5555"
             />
             {phoneError && (

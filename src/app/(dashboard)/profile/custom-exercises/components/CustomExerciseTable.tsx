@@ -7,16 +7,15 @@ import { type ExerciseSortField, type SortDirection } from '@/app/types'
 import { CustomExercise, User } from '@prisma/client'
 import SortIcon from '@/app/components/SortIcon'
 import { getSortLink, getPageLink } from '@/app/helpers/helpers'
+import CustomExerciseTableBody from './CustomExerciseTableBody'
 
 // Catalyst
 import { Button } from '@/app/components/catalyst/button'
 import {
   Table,
   TableHead,
-  TableBody,
   TableRow,
-  TableHeader,
-  TableCell
+  TableHeader
 } from '@/app/components/catalyst/table'
 import { Heading } from '@/app/components/catalyst/heading'
 import { Divider } from '@/app/components/catalyst/divider'
@@ -128,36 +127,10 @@ export default function CustomExerciseTable({
               <TableHeader className="min-w-[5%]" />
             </TableRow>
           </TableHead>
-          <TableBody>
-            {exercises.map((exercise) => (
-              <TableRow key={exercise.id} href="#">
-                <TableCell className="w-[30%] relative">
-                  <div className="absolute inset-0 flex items-center pr-8">
-                    <div className="truncate">{exercise.name}</div>
-                  </div>
-                </TableCell>
-                <TableCell className="w-[17.5%]">
-                  <div className="truncate pr-4">{exercise.type}</div>
-                </TableCell>
-                <TableCell className="w-[17.5%]">
-                  <div className="truncate pr-4">{exercise.equipment}</div>
-                </TableCell>
-                <TableCell className="w-[17.5%]">
-                  <div className="truncate pr-4">{exercise.difficulty}</div>
-                </TableCell>
-                <TableCell className="w-[12.5%]">
-                  <div className="truncate pr-4">
-                    {new Date(exercise.createdAt).toLocaleDateString()}
-                  </div>
-                </TableCell>
-                <TableCell className="w-[5%]">
-                  <div className="text-right">
-                    <Button outline>Edit</Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+          <CustomExerciseTableBody
+            paginatedExercises={exercises}
+            isLoading={false}
+          />
         </Table>
       </div>
 

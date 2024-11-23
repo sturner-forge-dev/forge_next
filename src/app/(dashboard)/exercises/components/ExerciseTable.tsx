@@ -19,6 +19,7 @@ import {
 } from '@/app/components/catalyst/table'
 import { Heading } from '@/app/components/catalyst/heading'
 import { Divider } from '@/app/components/catalyst/divider'
+import DifficultyBadge from '@/app/components/DifficultyBadge'
 
 interface ExerciseTableProps {
   exercises: Exercise[]
@@ -119,7 +120,9 @@ export default function ExerciseTable({
                   <div className="truncate">{exercise.equipment}</div>
                 </TableCell>
                 <TableCell className="min-w-[20%] whitespace-nowrap truncate">
-                  <div className="truncate">{exercise.difficulty}</div>
+                  <div className="truncate">
+                    <DifficultyBadge difficulty={exercise.difficulty} />
+                  </div>
                 </TableCell>
                 <TableCell className="min-w-[5%] whitespace-nowrap truncate">
                   <div className="text-right">

@@ -14,7 +14,7 @@ export default function SubmitButton({
       type="button"
       onClick={onClick}
       disabled={isLoading}
-      className="inline-flex min-w-32 justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 disabled:bg-indigo-400 disabled:cursor-not-allowed"
+      className="inline-flex min-w-32 justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 sm:ml-3 disabled:bg-indigo-400 disabled:cursor-not-allowed"
     >
       {isLoading ? (
         <>

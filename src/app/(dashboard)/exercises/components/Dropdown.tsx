@@ -26,7 +26,7 @@ export default function Dropdown({
         {label}
       </Label>
       <div className="relative mt-2">
-        <ListboxButton className="relative w-full cursor-default rounded-md bg-white py-2 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm/6 sm:max-w-md">
+        <ListboxButton className="relative w-full cursor-default rounded-md bg-white py-2 pl-3 pr-10 text-left text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 focus:outline-hidden focus:ring-2 focus:ring-indigo-600 sm:text-sm/6 sm:max-w-md">
           <span className="block truncate">
             {value ? (
               value
@@ -44,15 +44,15 @@ export default function Dropdown({
 
         <ListboxOptions
           transition
-          className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none data-[closed]:data-[leave]:opacity-0 data-[leave]:transition data-[leave]:duration-100 data-[leave]:ease-in sm:text-sm"
+          className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden data-closed:data-leave:opacity-0 data-leave:transition data-leave:duration-100 data-leave:ease-in sm:text-sm"
         >
           {options.map((option) => (
             <ListboxOption
               key={option.id}
               value={option.label}
-              className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white"
+              className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-focus:bg-indigo-600 data-focus:text-white"
             >
-              <span className="block truncate font-normal group-data-[selected]:font-semibold">
+              <span className="block truncate font-normal group-data-selected:font-semibold">
                 {option.label}
               </span>
             </ListboxOption>
