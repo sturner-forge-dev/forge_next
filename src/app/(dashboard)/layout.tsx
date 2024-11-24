@@ -1,7 +1,5 @@
 import Image from 'next/image'
 import Navigation from './components/Navigations'
-import { Suspense } from 'react'
-import Loading from './loading'
 import { getUser } from '@/app/api/data-layer/user'
 
 const user = await getUser()
@@ -19,13 +17,11 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
               alt="logo"
               width={60}
               height={60}
-              className="mt-16 outline outline-1 outline-white/50 rounded-full cursor-pointer"
+              className="mt-16 outline-1 outline-white/50 rounded-full cursor-pointer"
             />
           </div>
         </header>
-        <div className="h-[calc(100vh-60px)]">
-          <Suspense fallback={<Loading />}>{children}</Suspense>
-        </div>
+        <div className="h-[calc(100vh-60px)]">{children}</div>
       </div>
     </div>
   )

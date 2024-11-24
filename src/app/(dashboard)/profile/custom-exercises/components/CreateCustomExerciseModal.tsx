@@ -1,21 +1,25 @@
 'use client'
 
 import { CustomExercise, User } from '@prisma/client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
-import Dropdown from './Dropdown'
-import { Button } from '@/app/components/catalyst/button'
-import { Divider } from '@/app/components/catalyst/divider'
-import { Heading, Subheading } from '@/app/components/catalyst/heading'
-import { DarkInput } from '@/app/components/DarkInput'
-import { Text } from '@/app/components/catalyst/text'
-import { DarkTextarea } from '@/app/components/DarkTextArea'
+import Dropdown from '@/app/components/ui/Dropdown'
+import Messaging from '@/app/components/info/Messaging'
+import { DarkInput } from '@/app/components/ui/DarkInput'
+import { DarkTextarea } from '@/app/components/ui/DarkTextArea'
 import {
   exerciseTypes,
   equipmentTypes,
-  difficultyLevels
-} from '../constants/constants'
-import Messaging from '@/app/components/Messaging'
+  difficultyLevels,
+  muscleGroups
+} from '../../../exercises/constants/constants'
+
+//Catalyst
+import { Text } from '@/app/components/catalyst/text'
+import { Heading, Subheading } from '@/app/components/catalyst/heading'
+import { Button } from '@/app/components/catalyst/button'
+import { Divider } from '@/app/components/catalyst/divider'
+
 interface CreateCustomExerciseModalProps {
   isOpen: boolean
   onClose: () => void
@@ -34,6 +38,8 @@ export default function CreateCustomExerciseModal({
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [primaryMuscles, setPrimaryMuscles] = useState<string[]>([])
+  const [secondaryMuscles, setSecondaryMuscles] = useState<string[]>([])
   const [exercise, setExercise] = useState<
     Omit<CustomExercise, 'id' | 'createdAt'>
   >({
@@ -42,8 +48,27 @@ export default function CreateCustomExerciseModal({
     type: '',
     equipment: '',
     difficulty: '',
-    description: ''
+    description: '',
+    category: null,
+    primaryMuscles: primaryMuscles,
+    secondaryMuscles: secondaryMuscles
   })
+
+  useEffect(() => {
+    setExercise((prev) => ({
+      ...prev,
+      primaryMuscles,
+      secondaryMuscles
+    }))
+  }, [primaryMuscles, secondaryMuscles])
+
+  const handlePrimaryMuscleChange = (selected: string[]) => {
+    setPrimaryMuscles(selected)
+  }
+
+  const handleSecondaryMuscleChange = (selected: string[]) => {
+    setSecondaryMuscles(selected)
+  }
 
   const handleCreateExercise = async () => {
     setIsLoading(true)
@@ -56,7 +81,10 @@ export default function CreateCustomExerciseModal({
         type: '',
         equipment: '',
         difficulty: '',
-        description: ''
+        description: '',
+        category: null,
+        primaryMuscles: primaryMuscles,
+        secondaryMuscles: secondaryMuscles
       })
       setTimeout(() => setSuccessMessage(null), 3000)
     } catch (error) {
@@ -137,8 +165,8 @@ export default function CreateCustomExerciseModal({
                   <div className="space-y-4">
                     <Dropdown
                       options={exerciseTypes}
-                      label="Exercise Type"
-                      value={exercise.type}
+                      value={exercise.type || ''}
+                      name="Exercise Type"
                       onChange={(value) =>
                         setExercise({ ...exercise, type: value })
                       }
@@ -160,19 +188,48 @@ export default function CreateCustomExerciseModal({
                   <div className="space-y-4">
                     <Dropdown
                       options={equipmentTypes}
-                      label="Equipment Type"
-                      value={exercise.equipment}
+                      value={exercise.equipment || ''}
+                      name="Exercise Equipment"
                       onChange={(value) =>
                         setExercise({ ...exercise, equipment: value })
                       }
                     />
                     <Dropdown
                       options={difficultyLevels}
-                      label="Difficulty Level"
-                      value={exercise.difficulty}
+                      value={exercise.difficulty || ''}
+                      name="Exercise Difficulty"
                       onChange={(value) =>
                         setExercise({ ...exercise, difficulty: value })
                       }
+                    />
+                  </div>
+                </section>
+
+                <Divider soft className="border-gray-700" />
+
+                <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+                  <div className="space-y-1">
+                    <Subheading className="text-white">
+                      Target Muscle Groups
+                    </Subheading>
+                    <Text className="text-gray-300">
+                      What muscle groups are targeted by this exercise?
+                    </Text>
+                  </div>
+                  <div className="space-y-4">
+                    <Dropdown
+                      options={muscleGroups}
+                      name="Primary Muscle Groups"
+                      value={primaryMuscles}
+                      onChange={handlePrimaryMuscleChange}
+                      multiple={true as const}
+                    />
+                    <Dropdown
+                      options={muscleGroups}
+                      name="Secondary Muscle Groups"
+                      value={secondaryMuscles}
+                      onChange={handleSecondaryMuscleChange}
+                      multiple={true as const}
                     />
                   </div>
                 </section>
@@ -190,7 +247,7 @@ export default function CreateCustomExerciseModal({
                     <DarkTextarea
                       aria-label="Exercise Description"
                       value={exercise.description || ''}
-                      onChange={(e) =>
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                         setExercise({
                           ...exercise,
                           description: e.target.value
@@ -211,7 +268,7 @@ export default function CreateCustomExerciseModal({
                     color="dark/zinc"
                     className="bg-gray-700 hover:bg-gray-600 text-white"
                   >
-                    Cancel
+                    Close
                   </Button>
                   <Button
                     type="submit"

@@ -1,37 +1,30 @@
 'use client'
 
-import TableNavigation from '@/app/components/TableNavigation'
+import TableNavigation from '@/app/components/table/TableNavigation'
 import Link from 'next/link'
 import { type ExerciseSortField, type SortDirection } from '@/app/types'
-import { Exercise, CustomExercise, User } from '@prisma/client'
-import SortIcon from '@/app/components/SortIcon'
+import { Exercise } from '@prisma/client'
+import SortIcon from '@/app/components/info/SortIcon'
 import { getSortLink, getPageLink } from '@/app/helpers/helpers'
+import ExerciseTableBody from '@/app/components/table/ExerciseTableBody'
+import { useMemo } from 'react'
 
 // Catalyst
-import { Button } from '@/app/components/catalyst/button'
 import {
   Table,
   TableHead,
-  TableBody,
   TableRow,
-  TableHeader,
-  TableCell
+  TableHeader
 } from '@/app/components/catalyst/table'
 import { Heading } from '@/app/components/catalyst/heading'
 import { Divider } from '@/app/components/catalyst/divider'
-import DifficultyBadge from '@/app/components/DifficultyBadge'
 
 interface ExerciseTableProps {
   exercises: Exercise[]
   sortBy: ExerciseSortField
   order: SortDirection
   page: number
-  totalPages: number
-  user: User
-  createExerciseAction: (
-    exercise: CustomExercise,
-    user: User
-  ) => Promise<CustomExercise>
+  itemsPerPage: number
 }
 
 export default function ExerciseTable({
@@ -39,7 +32,7 @@ export default function ExerciseTable({
   sortBy,
   order,
   page,
-  totalPages
+  itemsPerPage
 }: ExerciseTableProps) {
   const getLink = (field: string) => {
     return getSortLink(field, page, sortBy, order, '/exercises')
@@ -48,6 +41,26 @@ export default function ExerciseTable({
   const getPage = (newPage: number) => {
     return getPageLink(newPage, sortBy, order)
   }
+
+  // Sort exercises
+  const sortedExercises = useMemo(() => {
+    if (!sortBy) return exercises
+
+    return [...exercises].sort((a, b) => {
+      const compareValue = order === 'asc' ? 1 : -1
+      const aVal = a[sortBy] ?? ''
+      const bVal = b[sortBy] ?? ''
+      return aVal > bVal ? compareValue : -compareValue
+    })
+  }, [exercises, sortBy, order])
+
+  // Paginate exercises
+  const paginatedExercises = useMemo(() => {
+    const startIndex = (page - 1) * itemsPerPage
+    return sortedExercises.slice(startIndex, startIndex + itemsPerPage)
+  }, [sortedExercises, page, itemsPerPage])
+
+  const totalPages = Math.ceil(exercises.length / itemsPerPage)
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
@@ -107,31 +120,11 @@ export default function ExerciseTable({
               <TableHeader className="min-w-[5%]" />
             </TableRow>
           </TableHead>
-          <TableBody>
-            {exercises.map((exercise) => (
-              <TableRow key={exercise.id} href="#">
-                <TableCell className="w-[25%] whitespace-nowrap truncate">
-                  <div className="truncate">{exercise.name}</div>
-                </TableCell>
-                <TableCell className="w-[20%] whitespace-nowrap truncate">
-                  <div className="truncate">{exercise.type}</div>
-                </TableCell>
-                <TableCell className="w-[20%] whitespace-nowrap truncate">
-                  <div className="truncate">{exercise.equipment}</div>
-                </TableCell>
-                <TableCell className="min-w-[20%] whitespace-nowrap truncate">
-                  <div className="truncate">
-                    <DifficultyBadge difficulty={exercise.difficulty} />
-                  </div>
-                </TableCell>
-                <TableCell className="min-w-[5%] whitespace-nowrap truncate">
-                  <div className="text-right">
-                    <Button outline>View</Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+
+          <ExerciseTableBody
+            paginatedExercises={paginatedExercises}
+            isLoading={false}
+          />
         </Table>
       </div>
 

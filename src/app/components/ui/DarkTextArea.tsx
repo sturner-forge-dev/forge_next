@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { Textarea } from './catalyst/textarea'
+import { Textarea } from '@/app/components/catalyst/textarea'
 import clsx from 'clsx'
 
 export const DarkTextarea = forwardRef<

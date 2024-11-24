@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { Input } from './catalyst/input'
+import { Input } from '@/app/components/catalyst/input'
 import clsx from 'clsx'
 
 export const DarkInput = forwardRef<

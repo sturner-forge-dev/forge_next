@@ -7,9 +7,9 @@ export async function getCustomExercisesAction(
   page: number = 1,
   itemsPerPage: number = 10
 ) {
-  const exercises = await getCustomExercises(user.id)
-  const totalExercises = exercises.length
-  const totalPages = Math.ceil(totalExercises / itemsPerPage)
+  const { exercises, totalCount } = await getCustomExercises(user.id)
+
+  const totalPages = Math.ceil(totalCount / itemsPerPage)
 
   // Calculate pagination slice
   const start = (page - 1) * itemsPerPage
@@ -18,6 +18,6 @@ export async function getCustomExercisesAction(
   return {
     exercises: paginatedExercises,
     totalPages,
-    totalExercises
+    totalCount
   }
 }
