@@ -25,3 +25,13 @@ export const difficultyLevels = [
   { label: 'Intermediate', id: 2 },
   { label: 'Advanced', id: 3 }
 ]
+
+export const muscleGroups = [
+  { label: 'Chest', id: 1 },
+  { label: 'Back', id: 2 },
+  { label: 'Shoulders', id: 3 },
+  { label: 'Arms', id: 4 },
+  { label: 'Abs', id: 5 },
+  { label: 'Legs', id: 6 },
+  { label: 'Other', id: 7 }
+]

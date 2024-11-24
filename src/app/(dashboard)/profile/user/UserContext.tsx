@@ -69,13 +69,7 @@ export function UserProvider({
       newOrder: SortDirection
     ) => {
       try {
-        const { exercises } = await getCustomExercises(
-          page,
-          itemsPerPage,
-          newSortBy,
-          newOrder,
-          user.id
-        )
+        const { exercises } = await getCustomExercises(user.id)
 
         if (exercises.length > 0) {
           setCurrentPage(page)

@@ -30,10 +30,6 @@ export default async function ProfileLayout({
   const itemsPerPage = 10
 
   const { exercises: customExercises, totalCount } = await getCustomExercises(
-    currentPage,
-    itemsPerPage,
-    sortBy,
-    order,
     user.id
   )
 

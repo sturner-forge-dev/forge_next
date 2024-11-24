@@ -1,69 +1,59 @@
 'use client'
 
-import { CustomExercise, User } from '@prisma/client'
-import { useState } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
-import Dropdown from './Dropdown'
-import { Button } from '@/app/components/catalyst/button'
-import { Divider } from '@/app/components/catalyst/divider'
-import { Heading, Subheading } from '@/app/components/catalyst/heading'
-import { DarkInput } from '@/app/components/DarkInput'
-import { Text } from '@/app/components/catalyst/text'
-import { DarkTextarea } from '@/app/components/DarkTextArea'
+import { CustomExercise } from '@prisma/client'
+import { useState } from 'react'
+import Messaging from '@/app/components/info/Messaging'
+import { DarkInput } from '@/app/components/ui/DarkInput'
+import Dropdown from '@/app/components/ui/Dropdown'
 import {
-  exerciseTypes,
+  difficultyLevels,
   equipmentTypes,
-  difficultyLevels
-} from '../constants/constants'
-import Messaging from '@/app/components/Messaging'
-interface CreateCustomExerciseModalProps {
+  exerciseTypes
+} from '@/app/(dashboard)/exercises/constants/constants'
+import { DarkTextarea } from '@/app/components/ui/DarkTextArea'
+
+// Catalyst
+import { Heading, Subheading } from '@/app/components/catalyst/heading'
+import { Text } from '@/app/components/catalyst/text'
+import { Divider } from '@/app/components/catalyst/divider'
+import { Button } from '@/app/components/catalyst/button'
+
+interface EditCustomExerciseModalProps {
   isOpen: boolean
   onClose: () => void
-  onCreate: (
+  onEdit: (
     exercise: Omit<CustomExercise, 'id' | 'createdAt'>
-  ) => Promise<void>
-  user: User
+  ) => Promise<CustomExercise>
+  customExercise: CustomExercise
+  onSuccess?: () => void
 }
 
-export default function CreateCustomExerciseModal({
+export default function EditCustomExerciseModal({
   isOpen,
   onClose,
-  onCreate,
-  user
-}: CreateCustomExerciseModalProps) {
+  onEdit,
+  customExercise,
+  onSuccess
+}: EditCustomExerciseModalProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
-  const [exercise, setExercise] = useState<
-    Omit<CustomExercise, 'id' | 'createdAt'>
-  >({
-    userId: user.id,
-    name: '',
-    type: '',
-    equipment: '',
-    difficulty: '',
-    description: ''
-  })
+  const [exercise, setExercise] =
+    useState<Omit<CustomExercise, 'id' | 'createdAt'>>(customExercise)
 
-  const handleCreateExercise = async () => {
+  const handleEditExercise = async () => {
     setIsLoading(true)
     try {
-      await onCreate(exercise)
-      setSuccessMessage('Exercise created successfully')
-      setExercise({
-        userId: user.id,
-        name: '',
-        type: '',
-        equipment: '',
-        difficulty: '',
-        description: ''
-      })
-      setTimeout(() => setSuccessMessage(null), 3000)
+      await onEdit(exercise)
+      setSuccessMessage('Exercise edited successfully')
+      onSuccess?.()
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      setIsLoading(false)
+      onClose()
     } catch (error) {
-      setErrorMessage('Error creating exercise')
+      setErrorMessage('Failed to edit exercise')
       setTimeout(() => setErrorMessage(null), 3000)
-      console.error(error)
-    } finally {
       setIsLoading(false)
     }
   }
@@ -81,10 +71,9 @@ export default function CreateCustomExerciseModal({
             transition
             className="relative w-full max-w-2xl transform rounded-lg bg-gray-900 p-6 text-left shadow-xl transition-all"
           >
-            <Heading className="text-white">Create Custom Exercise</Heading>
+            <Heading className="text-white">Edit {customExercise.name}</Heading>
             <Text className="mt-2 text-gray-300">
-              Create a custom exercise to add to your workout. Exercises you
-              create are private to you and are viewable on your profile.
+              Edit the details of your exercise.
             </Text>
 
             <Divider className="my-6 border-gray-700" />
@@ -97,7 +86,7 @@ export default function CreateCustomExerciseModal({
             <form
               onSubmit={(e) => {
                 e.preventDefault()
-                handleCreateExercise()
+                handleEditExercise()
               }}
             >
               <div className="space-y-8">
@@ -190,7 +179,7 @@ export default function CreateCustomExerciseModal({
                     <DarkTextarea
                       aria-label="Exercise Description"
                       value={exercise.description || ''}
-                      onChange={(e) =>
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                         setExercise({
                           ...exercise,
                           description: e.target.value
@@ -219,7 +208,7 @@ export default function CreateCustomExerciseModal({
                     color="indigo"
                     className="bg-indigo-600 hover:bg-indigo-500 text-white"
                   >
-                    {isLoading ? 'Creating...' : 'Create Exercise'}
+                    {isLoading ? 'Saving...' : 'Save Changes'}
                   </Button>
                 </div>
               </div>

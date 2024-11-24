@@ -1,13 +1,18 @@
 'use client'
 
-import TableNavigation from '@/app/components/TableNavigation'
-import CreateCustomExerciseModal from '@/app/(dashboard)/exercises/components/CreateCustomExerciseModal'
-import Link from 'next/link'
-import { type ExerciseSortField, type SortDirection } from '@/app/types'
 import { CustomExercise, User } from '@prisma/client'
-import SortIcon from '@/app/components/SortIcon'
+import { useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+
+import { type ExerciseSortField, type SortDirection } from '@/app/types'
 import { getSortLink, getPageLink } from '@/app/helpers/helpers'
-import CustomExerciseTableBody from './CustomExerciseTableBody'
+
+import SortIcon from '@/app/components/info/SortIcon'
+import TableNavigation from '@/app/components/table/TableNavigation'
+import ExerciseTableBody from '@/app/components/table/ExerciseTableBody'
+import EditCustomExerciseModal from './EditCustomExerciseModal'
+import CreateCustomExerciseModal from './CreateCustomExerciseModal'
 
 // Catalyst
 import { Button } from '@/app/components/catalyst/button'
@@ -19,19 +24,19 @@ import {
 } from '@/app/components/catalyst/table'
 import { Heading } from '@/app/components/catalyst/heading'
 import { Divider } from '@/app/components/catalyst/divider'
-import { useState } from 'react'
 
 interface CustomExerciseTableProps {
   exercises: CustomExercise[]
   sortBy: ExerciseSortField
   order: SortDirection
   page: number
-  totalPages: number
+  itemsPerPage: number
   user: User
   createExerciseAction: (
-    exercise: CustomExercise,
+    exercise: Omit<CustomExercise, 'id' | 'createdAt'>,
     user: User
-  ) => Promise<CustomExercise>
+  ) => Promise<void>
+  editExerciseAction: (exercise: CustomExercise) => Promise<CustomExercise>
 }
 
 export default function CustomExerciseTable({
@@ -39,11 +44,17 @@ export default function CustomExerciseTable({
   sortBy,
   order,
   page,
-  totalPages,
+  itemsPerPage,
   user,
-  createExerciseAction
+  createExerciseAction,
+  editExerciseAction
 }: CustomExerciseTableProps) {
+  const router = useRouter()
+
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [selectedExercise, setSelectedExercise] =
+    useState<CustomExercise | null>(null)
 
   const getLink = (field: string) => {
     return getSortLink(field, page, sortBy, order, '/profile/custom-exercises')
@@ -51,6 +62,33 @@ export default function CustomExerciseTable({
 
   const getPage = (newPage: number) => {
     return getPageLink(newPage, sortBy, order)
+  }
+
+  // Sort exercises
+  const sortedExercises = useMemo(() => {
+    if (!sortBy) return exercises
+
+    return [...exercises].sort((a, b) => {
+      const compareValue = order === 'asc' ? 1 : -1
+      const aVal = a[sortBy] ?? ''
+      const bVal = b[sortBy] ?? ''
+      return aVal > bVal ? compareValue : -compareValue
+    })
+  }, [exercises, sortBy, order])
+
+  // Paginate exercises
+  const paginatedExercises = useMemo(() => {
+    const startIndex = (page - 1) * itemsPerPage
+    return sortedExercises.slice(startIndex, startIndex + itemsPerPage)
+  }, [sortedExercises, page, itemsPerPage])
+
+  const totalPages = Math.ceil(exercises.length / itemsPerPage)
+
+  const handleEditSuccess = () => {
+    // Small delay before refresh to ensure modal closes smoothly
+    setTimeout(() => {
+      router.refresh()
+    }, 100)
   }
 
   return (
@@ -127,9 +165,14 @@ export default function CustomExerciseTable({
               <TableHeader className="min-w-[5%]" />
             </TableRow>
           </TableHead>
-          <CustomExerciseTableBody
-            paginatedExercises={exercises}
+
+          <ExerciseTableBody
+            paginatedExercises={paginatedExercises}
             isLoading={false}
+            onClick={(exercise) => {
+              setSelectedExercise(exercise as CustomExercise)
+              setIsEditModalOpen(true)
+            }}
           />
         </Table>
       </div>
@@ -148,6 +191,24 @@ export default function CustomExerciseTable({
             await createExerciseAction(exercise as CustomExercise, user)
           }}
           user={user}
+        />
+      )}
+      {isEditModalOpen && selectedExercise && (
+        <EditCustomExerciseModal
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false)
+            setSelectedExercise(null)
+          }}
+          onEdit={async (exercise) => {
+            const updatedExercise = await editExerciseAction(
+              exercise as CustomExercise
+            )
+            router.refresh()
+            return updatedExercise as CustomExercise
+          }}
+          customExercise={selectedExercise}
+          onSuccess={handleEditSuccess}
         />
       )}
     </div>

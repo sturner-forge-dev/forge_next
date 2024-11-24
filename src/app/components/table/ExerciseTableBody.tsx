@@ -1,23 +1,24 @@
 import { TableBody, TableCell, TableRow } from '@/app/components/catalyst/table'
 import { Button } from '@/app/components/catalyst/button'
-import { CustomExercise } from '@prisma/client'
-import DifficultyBadge from '@/app/components/DifficultyBadge'
+import { Exercise, CustomExercise } from '@prisma/client'
+import DifficultyBadge from '@/app/components/info/DifficultyBadge'
 
-interface CustomExerciseTableBodyProps {
-  paginatedExercises: CustomExercise[]
+interface ExerciseTableBodyProps {
+  paginatedExercises: (Exercise | CustomExercise)[]
   isLoading: boolean
+  onClick: (exercise: Exercise | CustomExercise) => void
 }
 
-export default function CustomExerciseTableBody({
+export default function ExerciseTableBody({
   paginatedExercises,
-  isLoading
-}: CustomExerciseTableBodyProps) {
+  isLoading,
+  onClick
+}: ExerciseTableBodyProps) {
   return (
     <TableBody>
-      {paginatedExercises.map((exercise: CustomExercise) => (
+      {paginatedExercises.map((exercise: Exercise | CustomExercise) => (
         <TableRow
           key={exercise.id}
-          href={'#'}
           className={`transition-opacity duration-200 ${
             isLoading ? 'opacity-50' : 'opacity-100'
           }`}
@@ -38,15 +39,28 @@ export default function CustomExerciseTableBody({
               <DifficultyBadge difficulty={exercise.difficulty} />
             </div>
           </TableCell>
-          <TableCell className="w-[12.5%]">
-            <div className="truncate pr-4">
-              {new Date(exercise.createdAt).toLocaleDateString()}
-            </div>
-          </TableCell>
+          {'createdAt' in exercise && (
+            <TableCell className="w-[12.5%]">
+              <div className="truncate pr-4">
+                {new Date(exercise.createdAt).toLocaleDateString()}
+              </div>
+            </TableCell>
+          )}
           <TableCell className="w-[5%]">
             <div className="text-right">
-              <Button outline disabled={isLoading}>
-                Edit
+              <Button
+                outline
+                disabled={isLoading}
+                onClick={(e: {
+                  preventDefault: () => void
+                  stopPropagation: () => void
+                }) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  onClick(exercise)
+                }}
+              >
+                {'createdAt' in exercise ? 'Edit' : 'View'}
               </Button>
             </div>
           </TableCell>

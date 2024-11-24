@@ -15,24 +15,30 @@ datasource db {
 }
 
 model Exercise {
-  id          String  @id @default(uuid())
-  name        String  @unique
-  type        String?
-  equipment   String?
-  difficulty  String?
-  description String?
+  id               String   @id @default(uuid())
+  name             String   @unique
+  type             String?
+  category         String?
+  primaryMuscles   String[] @default([])
+  secondaryMuscles String[] @default([])
+  equipment        String?
+  difficulty       String?
+  description      String?
 }
 
 model CustomExercise {
-  id          String   @id @default(uuid())
-  name        String
-  type        String?
-  equipment   String?
-  difficulty  String?
-  description String?
-  createdAt   DateTime @default(now())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
+  id               String   @id @default(uuid())
+  name             String
+  type             String?
+  category         String?
+  primaryMuscles   String[] @default([])
+  secondaryMuscles String[] @default([])
+  equipment        String?
+  difficulty       String?
+  description      String?
+  createdAt        DateTime @default(now())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id])
 
   @@unique([name, userId])
   @@index([userId])

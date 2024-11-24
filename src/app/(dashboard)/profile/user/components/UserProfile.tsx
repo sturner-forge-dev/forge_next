@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { User } from '@prisma/client'
 
 // Components
-import PageLayout from '@/app/components/PageLayout'
+import PageLayout from '@/app/components/ui/PageLayout'
 import { Button } from '@/app/components/catalyst/button'
 import { Checkbox, CheckboxField } from '@/app/components/catalyst/checkbox'
 import { Divider } from '@/app/components/catalyst/divider'
@@ -15,7 +15,7 @@ import { Heading, Subheading } from '@/app/components/catalyst/heading'
 import { Input } from '@/app/components/catalyst/input'
 import { Text } from '@/app/components/catalyst/text'
 import { Textarea } from '@/app/components/catalyst/textarea'
-import Messaging from '@/app/components/Messaging'
+import Messaging from '@/app/components/info/Messaging'
 
 export default function UserProfileForm({ user }: { user: User }) {
   const router = useRouter()

@@ -1,12 +1,9 @@
 import { Suspense } from 'react'
 import ExerciseTable from './components/ExerciseTable'
-import { prisma } from '@/app/utils/db'
 import { type ExerciseSortField, type SortDirection } from '@/app/types'
 import Loading from './loading'
 import { getExercises } from '@/app/api/data-layer/exercise'
-import { getUser } from '@/app/api/data-layer/user'
-import PageLayout from '@/app/components/PageLayout'
-import { createCustomExerciseAction } from '@/app/api/data-layer/customExercise'
+import PageLayout from '@/app/components/ui/PageLayout'
 
 export default async function Exercises({
   searchParams
@@ -25,20 +22,13 @@ async function ExercisesContent({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const user = await getUser()
-
-  if (!user) return null
-
   const params = await searchParams
   const sortBy = params?.sortBy as ExerciseSortField
   const order = params?.order as SortDirection
   const currentPage = Number(params?.page) || 1
   const itemsPerPage = 10
 
-  const totalExercises = await prisma.exercise.count()
-  const totalPages = Math.ceil(totalExercises / itemsPerPage)
-
-  const exercises = await getExercises(currentPage, itemsPerPage, sortBy, order)
+  const exercises = await getExercises()
 
   return (
     <PageLayout>
@@ -47,9 +37,7 @@ async function ExercisesContent({
         sortBy={sortBy}
         order={order}
         page={currentPage}
-        totalPages={totalPages}
-        user={user}
-        createExerciseAction={createCustomExerciseAction}
+        itemsPerPage={itemsPerPage}
       />
     </PageLayout>
   )

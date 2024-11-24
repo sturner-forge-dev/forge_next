@@ -1,4 +1,4 @@
-import PageLayout from '@/app/components/PageLayout'
+import PageLayout from '@/app/components/ui/PageLayout'
 
 export default function HistoryPage() {
   return (
