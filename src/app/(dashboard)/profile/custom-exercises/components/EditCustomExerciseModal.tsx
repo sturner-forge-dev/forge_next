@@ -9,7 +9,8 @@ import Dropdown from '@/app/components/ui/Dropdown'
 import {
   difficultyLevels,
   equipmentTypes,
-  exerciseTypes
+  exerciseTypes,
+  muscleGroups
 } from '@/app/(dashboard)/exercises/constants/constants'
 import { DarkTextarea } from '@/app/components/ui/DarkTextArea'
 
@@ -39,13 +40,25 @@ export default function EditCustomExerciseModal({
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [primaryMuscles, setPrimaryMuscles] = useState<string[]>(
+    customExercise.primaryMuscles || []
+  )
+  const [secondaryMuscles, setSecondaryMuscles] = useState<string[]>(
+    customExercise.secondaryMuscles || []
+  )
   const [exercise, setExercise] =
     useState<Omit<CustomExercise, 'id' | 'createdAt'>>(customExercise)
 
   const handleEditExercise = async () => {
     setIsLoading(true)
     try {
-      await onEdit(exercise)
+      const updatedExercise = {
+        ...exercise,
+        primaryMuscles,
+        secondaryMuscles
+      }
+
+      await onEdit(updatedExercise)
       setSuccessMessage('Exercise edited successfully')
       onSuccess?.()
       await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -56,6 +69,14 @@ export default function EditCustomExerciseModal({
       setTimeout(() => setErrorMessage(null), 3000)
       setIsLoading(false)
     }
+  }
+
+  const handlePrimaryMuscleChange = (selected: string[]) => {
+    setPrimaryMuscles(selected)
+  }
+
+  const handleSecondaryMuscleChange = (selected: string[]) => {
+    setSecondaryMuscles(selected)
   }
 
   return (
@@ -126,8 +147,8 @@ export default function EditCustomExerciseModal({
                   <div className="space-y-4">
                     <Dropdown
                       options={exerciseTypes}
-                      label="Exercise Type"
-                      value={exercise.type}
+                      name="Exercise Type"
+                      value={exercise.type || ''}
                       onChange={(value) =>
                         setExercise({ ...exercise, type: value })
                       }
@@ -149,19 +170,48 @@ export default function EditCustomExerciseModal({
                   <div className="space-y-4">
                     <Dropdown
                       options={equipmentTypes}
-                      label="Equipment Type"
-                      value={exercise.equipment}
+                      name="Equipment Type"
+                      value={exercise.equipment || ''}
                       onChange={(value) =>
                         setExercise({ ...exercise, equipment: value })
                       }
                     />
                     <Dropdown
                       options={difficultyLevels}
-                      label="Difficulty Level"
-                      value={exercise.difficulty}
+                      name="Difficulty Level"
+                      value={exercise.difficulty || ''}
                       onChange={(value) =>
                         setExercise({ ...exercise, difficulty: value })
                       }
+                    />
+                  </div>
+                </section>
+
+                <Divider soft className="border-gray-700" />
+
+                <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+                  <div className="space-y-1">
+                    <Subheading className="text-white">
+                      Target Muscle Groups
+                    </Subheading>
+                    <Text className="text-gray-300">
+                      What muscle groups are targeted by this exercise?
+                    </Text>
+                  </div>
+                  <div className="space-y-4">
+                    <Dropdown
+                      options={muscleGroups}
+                      name="Primary Muscle Groups"
+                      value={primaryMuscles || []}
+                      onChange={handlePrimaryMuscleChange}
+                      multiple={true as const}
+                    />
+                    <Dropdown
+                      options={muscleGroups}
+                      name="Secondary Muscle Groups"
+                      value={secondaryMuscles || []}
+                      onChange={handleSecondaryMuscleChange}
+                      multiple={true as const}
                     />
                   </div>
                 </section>

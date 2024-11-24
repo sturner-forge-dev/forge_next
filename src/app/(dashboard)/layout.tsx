@@ -1,10 +1,8 @@
 import Image from 'next/image'
 import Navigation from './components/Navigations'
-import { Suspense } from 'react'
 import { getUser } from '@/app/api/data-layer/user'
 
 const user = await getUser()
-console.log(user)
 const userAvatar = user?.image
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {

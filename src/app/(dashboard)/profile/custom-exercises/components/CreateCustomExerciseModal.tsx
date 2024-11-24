@@ -3,20 +3,22 @@
 import { CustomExercise, User } from '@prisma/client'
 import { useState, useEffect } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
-import Dropdown from '../../../../components/ui/Dropdown'
-import { Button } from '@/app/components/catalyst/button'
-import { Divider } from '@/app/components/catalyst/divider'
-import { Heading, Subheading } from '@/app/components/catalyst/heading'
+import Dropdown from '@/app/components/ui/Dropdown'
+import Messaging from '@/app/components/info/Messaging'
 import { DarkInput } from '@/app/components/ui/DarkInput'
 import { DarkTextarea } from '@/app/components/ui/DarkTextArea'
-import { Text } from '@/app/components/catalyst/text'
 import {
   exerciseTypes,
   equipmentTypes,
   difficultyLevels,
   muscleGroups
 } from '../../../exercises/constants/constants'
-import Messaging from '@/app/components/info/Messaging'
+
+//Catalyst
+import { Text } from '@/app/components/catalyst/text'
+import { Heading, Subheading } from '@/app/components/catalyst/heading'
+import { Button } from '@/app/components/catalyst/button'
+import { Divider } from '@/app/components/catalyst/divider'
 
 interface CreateCustomExerciseModalProps {
   isOpen: boolean
