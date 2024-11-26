@@ -17,9 +17,11 @@ export default async function CustomExercises({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   return (
-    <Suspense fallback={<Loading />}>
-      <CustomExercisesContent searchParams={searchParams} />
-    </Suspense>
+    <PageLayout>
+      <Suspense fallback={<Loading />}>
+        <CustomExercisesContent searchParams={searchParams} />
+      </Suspense>
+    </PageLayout>
   )
 }
 
