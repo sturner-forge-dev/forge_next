@@ -132,11 +132,9 @@ export default function CreateCustomExerciseModal({
                 <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
                   <div className="space-y-1">
                     <Subheading className="text-white">
-                      Exercise Details
+                      Exercise Name
                     </Subheading>
-                    <Text className="text-gray-300">
-                      Basic information about your exercise.
-                    </Text>
+                    <Text className="text-gray-300">Give it a name!</Text>
                   </div>
                   <div className="space-y-4">
                     <DarkInput

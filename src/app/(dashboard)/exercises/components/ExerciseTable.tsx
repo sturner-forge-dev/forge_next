@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import TableNavigation from '@/app/components/table/TableNavigation'
 import Link from 'next/link'
 import { type ExerciseSortField, type SortDirection } from '@/app/types'
@@ -8,6 +9,7 @@ import SortIcon from '@/app/components/info/SortIcon'
 import { getSortLink, getPageLink } from '@/app/helpers/helpers'
 import ExerciseTableBody from '@/app/components/table/ExerciseTableBody'
 import { useMemo } from 'react'
+import ViewExerciseModal from './ViewExerciseModal'
 
 // Catalyst
 import {
@@ -34,6 +36,11 @@ export default function ExerciseTable({
   page,
   itemsPerPage
 }: ExerciseTableProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
+    null
+  )
+
   const getLink = (field: string) => {
     return getSortLink(field, page, sortBy, order, '/exercises')
   }
@@ -61,6 +68,11 @@ export default function ExerciseTable({
   }, [sortedExercises, page, itemsPerPage])
 
   const totalPages = Math.ceil(exercises.length / itemsPerPage)
+
+  const handleOnClick = (exercise: Exercise) => {
+    setSelectedExercise(exercise)
+    setIsModalOpen(true)
+  }
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
@@ -124,6 +136,7 @@ export default function ExerciseTable({
           <ExerciseTableBody
             paginatedExercises={paginatedExercises}
             isLoading={false}
+            onClick={handleOnClick}
           />
         </Table>
       </div>
@@ -133,6 +146,14 @@ export default function ExerciseTable({
         totalPages={totalPages}
         getPageLink={getPage}
       />
+
+      {isModalOpen && selectedExercise && (
+        <ViewExerciseModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          exercise={selectedExercise}
+        />
+      )}
     </div>
   )
 }
